@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PoNavbarItem } from '@po-ui/ng-components';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'covid19-panel';
+
+  isCollapsed: Boolean = false
+
+  MenuItems: PoNavbarItem[] = [
+    { label: 'Estado', link: '/cases/by-state' },
+    { label: 'Cidade', link: '/cases/by-city' }
+  ]
+
 }

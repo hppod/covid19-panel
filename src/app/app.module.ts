@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { NgModule } from '@angular/core';
 import { ROUTES } from "./app.routing"
 import { RouterModule } from "@angular/router"
@@ -15,6 +16,7 @@ import { ByStateComponent } from './cases/by-state/by-state.component';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(ROUTES),
     PoModule,
     PoTemplatesModule
