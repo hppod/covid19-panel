@@ -1,10 +1,21 @@
 <po-page-detail p-title="Casos por Cidade">
     <div class="po-row">
         <div [formGroup]="SearchByStateForm">
-            <po-combo name="state" formControlName="state" p-field-label="nome" p-field-value="sigla"
-                p-label="Cidades por Estado" [p-options]="States" p-help="Digite para buscar"
-                (p-change)="onChangeState($event)">
-            </po-combo>
+            <div class="po-lg-6">
+                <po-combo name="Estado" formControlName="state" p-field-label="nome" p-field-value="sigla"
+                    p-label="Selecione o Estado" [p-options]="States" p-help="Digite para buscar"
+                    (p-change)="onChangeState($event)">
+                </po-combo>
+            </div>
+            <div class="po-lg-6">
+                <po-combo name="Cidade" formControlName="district" p-field-label="nome" p-field-value="nome"
+                    p-label="Selecione a Cidade" [p-options]="Districts" p-help="Digite para buscar"
+                    (p-change)="onChangeDistrict($event)" [p-disabled]="!stateSelected">
+                </po-combo>
+            </div>
+        </div>
+        <div *ngIf="stateSelected" class="po-lg-6 po-mt-5" style="margin-top: 48px;">
+            <po-button p-label="Limpar" p-type="danger" (p-click)="clearConditionsClick()"> </po-button>
         </div>
     </div>
     <po-container [p-no-shadow]="true" [p-no-border]="true">

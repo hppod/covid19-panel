@@ -19,4 +19,8 @@ export class ByCityService {
     getStates(): Observable<HttpResponse<any[]>> {
         return this.http.get<any[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome`, { observe: 'response' })
     }
+
+    getDistricts(district: string): Observable<HttpResponse<any[]>> {
+        return this.http.get<any[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${district}/distritos?orderBy=nome`, { observe: 'response' })
+    }
 }

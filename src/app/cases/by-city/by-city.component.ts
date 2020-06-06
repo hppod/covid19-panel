@@ -14,23 +14,26 @@ import { City } from "./../../models/city.model"
 export class ByCityComponent implements OnInit, OnDestroy {
 
   request: Subscription
+  isLoading: boolean
+  stateSelected: boolean = false
   Data: City[]
   SearchByStateForm: FormGroup
   States: PoComboOption[] = new Array()
+  Districts: PoComboOption[] = new Array()
 
   constructor(
     private _router: Router,
     private _service: ByCityService,
     private _builder: FormBuilder
   ) {
+    this.initForm()
   }
 
   ngOnInit(): void {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false
     this._service.params = this._service.params.append('is_last', 'True')
-    this._service.params = this._service.params.append('page_size', '5000')
+    this._service.params = this._service.params.append('page_size', '200')
     this.getDataCasos()
-    this.initForm()
     this.getStates()
   }
 
@@ -40,21 +43,34 @@ export class ByCityComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.SearchByStateForm = this._builder.group({
-      state: this._builder.control(null)
+      state: this._builder.control(null),
+      district: this._builder.control(null)
     })
   }
 
   getDataCasos() {
+    this.isLoading = true
     this.request = this._service.getDataCasos().subscribe(response => {
       this.Data = response.body['results']
+      this.isLoading = false
     }, err => {
-
+      this.isLoading = false
     })
   }
 
   onChangeState($event) {
-    this._service.params = this._service.params.append('state', $event)
-    this.getDataCasos()
+    if ($event == null || $event == undefined) {
+      this.stateSelected = false
+      this._service.params = this._service.params.delete('state')
+      this.Data = null
+      this.getDataCasos()
+    } else {
+      this._service.params = this._service.params.append('state', $event)
+      this.stateSelected = true
+      this.getDistricts($event)
+      this.Data = null
+      this.getDataCasos()
+    }
   }
 
   getStates() {
@@ -66,6 +82,37 @@ export class ByCityComponent implements OnInit, OnDestroy {
         })
       }
     })
+  }
+
+  getDistricts(district: string) {
+    this.request = this._service.getDistricts(district).subscribe(response => {
+      for (let i = 0; i < response.body.length; i++) {
+        this.Districts.push({
+          label: response.body[i]['nome'],
+          value: response.body[i]['nome']
+        })
+      }
+    })
+  }
+
+  onChangeDistrict($event) {
+    if ($event == null || $event == undefined) {
+      this._service.params = this._service.params.delete('city')
+      this.Data = null
+      this.getDataCasos()
+    } else {
+      this._service.params = this._service.params.append('city', $event)
+      this.Data = null
+      this.getDataCasos()
+    }
+  }
+
+  clearConditionsClick() {
+    this.stateSelected = false
+    this._service.params = this._service.params.delete('city')
+    this._service.params = this._service.params.delete('state')
+    this.getDataCasos()
+    this.initForm()
   }
 
 }
