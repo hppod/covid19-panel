@@ -8,11 +8,13 @@ import { PoTemplatesModule } from "@po-ui/ng-templates"
 
 import { AppComponent } from './app.component';
 import { ByStateComponent } from './cases/by-state/by-state.component';
+import { ByCityComponent } from './cases/by-city/by-city.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ByStateComponent
+    ByStateComponent,
+    ByCityComponent
   ],
   imports: [
     BrowserModule,

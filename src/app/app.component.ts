@@ -12,7 +12,7 @@ export class AppComponent {
 
   MenuItems: PoNavbarItem[] = [
     { label: 'Estado', link: '/cases/by-state' },
-    { label: 'Cidade', link: '/cases/by-city' }
+    { label: 'Cidades', link: '/cases/by-city' }
   ]
 
 }
