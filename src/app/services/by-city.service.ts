@@ -15,4 +15,8 @@ export class ByCityService {
     getDataCasos(): Observable<HttpResponse<City[]>> {
         return this.http.get<City[]>(`https://brasil.io/api/dataset/covid19/caso/data`, { params: this.params, observe: 'response' })
     }
+
+    getStates(): Observable<HttpResponse<any[]>> {
+        return this.http.get<any[]>(`https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome`, { observe: 'response' })
+    }
 }

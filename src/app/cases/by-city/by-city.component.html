@@ -1,4 +1,12 @@
 <po-page-detail p-title="Casos por Cidade">
+    <div class="po-row">
+        <div [formGroup]="SearchByStateForm">
+            <po-combo name="state" formControlName="state" p-field-label="nome" p-field-value="sigla"
+                p-label="Cidades por Estado" [p-options]="States" p-help="Digite para buscar"
+                (p-change)="onChangeState($event)">
+            </po-combo>
+        </div>
+    </div>
     <po-container [p-no-shadow]="true" [p-no-border]="true">
         <po-container *ngFor="let case of Data; let i = index" class="po-lg-3 po-mt-2">
             <div class="po-row">

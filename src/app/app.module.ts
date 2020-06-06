@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
+import { FormsModule, ReactiveFormsModule } from "@angular/forms"
 import { NgModule } from '@angular/core';
 import { ROUTES } from "./app.routing"
 import { RouterModule } from "@angular/router"
@@ -19,6 +20,8 @@ import { ByCityComponent } from './cases/by-city/by-city.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot(ROUTES),
     PoModule,
     PoTemplatesModule
