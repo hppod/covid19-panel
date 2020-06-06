@@ -19,7 +19,8 @@
         </div>
     </div>
     <po-container [p-no-shadow]="true" [p-no-border]="true">
-        <po-container *ngFor="let case of Data; let i = index" class="po-lg-3 po-mt-2">
+        <po-container *ngFor="let case of Data | paginate: {itemsPerPage: limit, currentPage: p, totalItems: count}"
+            class="po-lg-3 po-mt-2">
             <div class="po-row">
                 <span class="po-font-subtitle">{{case['city']}}</span>
             </div>
@@ -40,4 +41,11 @@
             <span class="date-updated">Dados atualizados em {{case['date'] | date: 'dd/MM/yyyy'}}</span>
         </po-container>
     </po-container>
+    <nav *ngIf="Data">
+        <ul class="pagination">
+            <pagination-controls class="my-pagination" (pageChange)="getPage($event)" previousLabel="Anterior"
+                nextLabel="Próximo">
+            </pagination-controls>
+        </ul>
+    </nav>
 </po-page-detail>

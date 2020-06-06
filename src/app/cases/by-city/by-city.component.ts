@@ -13,8 +13,12 @@ import { City } from "./../../models/city.model"
 })
 export class ByCityComponent implements OnInit, OnDestroy {
 
+  limit: number = 200
+
   request: Subscription
   isLoading: boolean
+  p: number
+  count: number
   stateSelected: boolean = false
   Data: City[]
   SearchByStateForm: FormGroup
@@ -32,7 +36,8 @@ export class ByCityComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false
     this._service.params = this._service.params.append('is_last', 'True')
-    this._service.params = this._service.params.append('page_size', '200')
+    this._service.params = this._service.params.append('page', '1')
+    this._service.params = this._service.params.append('page_size', this.limit.toString())
     this.getDataCasos()
     this.getStates()
   }
@@ -52,10 +57,18 @@ export class ByCityComponent implements OnInit, OnDestroy {
     this.isLoading = true
     this.request = this._service.getDataCasos().subscribe(response => {
       this.Data = response.body['results']
+      this.count = response.body['count']
       this.isLoading = false
     }, err => {
       this.isLoading = false
     })
+  }
+
+  getPage(page: number) {
+    this.Data = null
+    this.p = page
+    this._service.params = this._service.params.set('page', page.toString())
+    this.getDataCasos()
   }
 
   onChangeState($event) {

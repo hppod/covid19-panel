@@ -6,6 +6,7 @@ import { NgModule } from '@angular/core';
 import { PoModule } from '@po-ui/ng-components';
 import { PoTemplatesModule } from "@po-ui/ng-templates"
 import { LottieModule } from "ngx-lottie"
+import { NgxPaginationModule } from "ngx-pagination"
 import player from 'lottie-web'
 import { ROUTES } from "./app.routing"
 
@@ -33,7 +34,8 @@ export function playerFactory() {
     RouterModule.forRoot(ROUTES),
     PoModule,
     PoTemplatesModule,
-    LottieModule.forRoot({ player: playerFactory })
+    LottieModule.forRoot({ player: playerFactory }),
+    NgxPaginationModule
   ],
   providers: [],
   bootstrap: [AppComponent]
