@@ -16,5 +16,6 @@ export const ROUTES: Routes = [
         ]
     },
     { path: 'prevention', component: PreventionComponent },
-    { path: 'about', component: AboutComponent }
+    { path: 'about', component: AboutComponent },
+    { path: '**', redirectTo: 'cases/by-country', pathMatch: 'full' }
 ]
