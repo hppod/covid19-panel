@@ -192,13 +192,15 @@ export class ByCountryComponent implements OnInit, OnDestroy {
 
   setNewCasesByState(data: CasoFull[]): Array<PoPieChartSeries> {
     let casesByState: PoPieChartSeries[] = new Array()
+    let top: PoPieChartSeries[] = new Array()
     for (let i = 0; i < data.length; i++) {
       casesByState.push({
         category: data[i]['state'],
         value: data[i]['new_confirmed']
       })
-      return casesByState
     }
+    top = casesByState.sort((a, b) => b.value - a.value).slice(0, 8)
+    return top
   }
 
   setCasesDetails(data: CasoFull[]): any[] {
