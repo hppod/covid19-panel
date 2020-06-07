@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { FormsModule, ReactiveFormsModule } from "@angular/forms"
 import { RouterModule } from "@angular/router"
-import { registerLocaleData } from '@angular/common';
+import { registerLocaleData, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { PoModule } from '@po-ui/ng-components';
 import { PoTemplatesModule } from "@po-ui/ng-templates"
@@ -54,6 +54,7 @@ registerLocaleData(localePt, 'pt-BR');
     ChartsModule
   ],
   providers: [
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: LOCALE_ID, useValue: 'pt-BR' }
   ],
   bootstrap: [AppComponent]
