@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from "rxjs"
 import { APIService } from "./../../services/api.service"
 import { CasoFull } from "./../../models/caso_full.model"
-import { PoModalComponent, PoTableColumn } from '@po-ui/ng-components';
+import { PoModalComponent, PoTableColumn, PoPieChartSeries, PoChartType } from '@po-ui/ng-components';
 import { Caso } from 'src/app/models/caso.model';
 import { Router } from '@angular/router';
 import { ChartDataSets, ChartOptions } from 'chart.js';
@@ -48,6 +48,18 @@ export class ByCountryComponent implements OnInit, OnDestroy {
       backgroundColor: 'rgba(76,94,98,0.3)'
     }
   ]
+
+  newCasesPerStateType: PoChartType = PoChartType.Donut
+  newCasesPerStateData: Array<PoPieChartSeries> = new Array()
+
+  // coffeeConsumption: Array<PoPieChartSeries> = [
+  //   { category: 'Brazil', value: 2796, tooltip: 'Brazil (South America)' },
+  //   { category: 'Vietnam', value: 1076, tooltip: 'Vietnam (Asia)' },
+  //   { category: 'Colombia', value: 688, tooltip: 'Colombia (South America)' },
+  //   { category: 'Indonesia', value: 682, tooltip: 'Indonesia (Asia/Oceania)' },
+  //   { category: 'Vietnam', value: 645, tooltip: 'Vietnam (Asia)' },
+  //   { category: 'Peru', value: 154, tooltip: 'Peru (South America)' }
+  // ]
 
   @ViewChild('detailsModal', { static: true }) detailsModalElement: PoModalComponent
 

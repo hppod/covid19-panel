@@ -33,10 +33,9 @@
         </po-container>
     </div>
     <div class="po-row">
-        <po-container *ngIf="lineChartData.length > 0" class="po-lg-4 po-mt-2">
-            <span class="po-font-text-bold">Casos por Estado</span>
-
-        </po-container>
+        <po-chart class="po-lg-4 po-mt-2" [p-height]="466" p-title="Novos casos por Estado"
+            [p-series]="newCasesPerStateData" [p-type]="newCasesPerStateType">
+        </po-chart>
         <po-container *ngIf="lineChartData.length > 0" class="po-lg-8 po-mt-2">
             <span class="po-font-text-bold">Curva epidemiológica</span>
             <canvas *ngIf="lineChartData" baseChart width="400" height="200" [datasets]="lineChartData"
