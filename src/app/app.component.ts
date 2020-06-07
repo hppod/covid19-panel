@@ -14,6 +14,7 @@ export class AppComponent {
     { label: 'Brasil', link: '/cases/by-country' },
     { label: 'Estados', link: '/cases/by-state' },
     // { label: 'Cidades', link: '/cases/by-city' },
+    { label: 'Como se prevenir', link: '/prevention' },
     { label: 'Sobre', link: '/about' }
   ]
 
