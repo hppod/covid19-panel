@@ -15,4 +15,8 @@ export class AppComponent {
     { label: 'Cidades', link: '/cases/by-city' }
   ]
 
+  onActivate($event) {
+    window.scroll(0, 0)
+  }
+
 }

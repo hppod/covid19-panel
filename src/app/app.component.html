@@ -1,5 +1,5 @@
 <po-navbar [p-items]="MenuItems" p-shadow="true">
 </po-navbar>
 <!-- <po-page-default> -->
-  <router-outlet></router-outlet>
+  <router-outlet (activate)="onActivate($event)"></router-outlet>
 <!-- </po-page-default> -->
