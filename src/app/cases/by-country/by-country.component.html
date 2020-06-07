@@ -1,11 +1,11 @@
 <po-page-detail p-title="Casos no País">
     <div class="po-row">
-        <po-widget class="po-lg-4 po-mt-2" p-height="200" p-primary-label="Detalhes" p-title="Casos"
+        <po-widget class="po-lg-4 po-mt-2" p-height="200" p-primary-label="Ver detalhado" p-title="Casos"
             (p-primary-action)="openModal('cases')">
             <div class="po-font-subtitle po-text-center">{{numberOfCases | number}}</div>
             <div class="po-text-center">{{numberOfNewCases | number}} novos</div>
         </po-widget>
-        <po-widget class="po-lg-4 po-mt-2" p-height="200" p-primary-label="Detalhes" p-title="Mortes"
+        <po-widget class="po-lg-4 po-mt-2" p-height="200" p-primary-label="Ver detalhado" p-title="Mortes"
             (p-primary-action)="openModal('deaths')">
             <div class="po-font-subtitle po-text-center">{{numberOfDeaths | number }}</div>
             <div class="po-text-center">{{numberOfNewDeaths | number}} novas</div>
