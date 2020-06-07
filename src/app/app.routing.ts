@@ -11,7 +11,7 @@ export const ROUTES: Routes = [
         path: 'cases', children: [
             { path: 'by-country', component: ByCountryComponent },
             { path: 'by-state', component: ByStateComponent },
-            { path: 'by-city', component: ByCityComponent }
+            // { path: 'by-city', component: ByCityComponent }
         ]
     },
     { path: 'about', component: AboutComponent }
