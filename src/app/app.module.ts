@@ -16,6 +16,7 @@ import { ByStateComponent } from './cases/by-state/by-state.component';
 import { ByCityComponent } from './cases/by-city/by-city.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { ByCountryComponent } from './cases/by-country/by-country.component';
+import { AboutComponent } from './about/about.component';
 
 export function playerFactory() {
   return player
@@ -27,7 +28,8 @@ export function playerFactory() {
     ByStateComponent,
     ByCityComponent,
     LoadingComponent,
-    ByCountryComponent
+    ByCountryComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

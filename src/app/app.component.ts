@@ -13,7 +13,8 @@ export class AppComponent {
   MenuItems: PoNavbarItem[] = [
     { label: 'Brasil', link: '/cases/by-country' },
     { label: 'Estados', link: '/cases/by-state' },
-    { label: 'Cidades', link: '/cases/by-city' }
+    { label: 'Cidades', link: '/cases/by-city' },
+    { label: 'Sobre', link: '/about' }
   ]
 
   onActivate($event) {

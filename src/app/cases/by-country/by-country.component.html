@@ -12,10 +12,6 @@
         </po-widget>
         <po-container p-height="200" class="po-lg-4 po-mt-2">
             <div class="po-row">
-                <!-- <po-widget class="po-md-12 po-lg-12 po-mt-2" p-title="População brasileira estimada em 2019">
-                    <div class="po-font-subtitle po-text-center">{{populationBrazil | number}}</div>
-                    <div class="po-text-center">habitantes</div>
-                </po-widget> -->
                 <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Total de munícipios">
                     <div class="po-font-subtitle po-text-center">{{totalCounties | number}}</div>
                     <div class="po-text-center">munícipios</div>
@@ -33,7 +29,7 @@
         </po-container>
     </div>
     <div class="po-row">
-        <po-chart class="po-lg-4 po-mt-2" [p-height]="466" p-title="Novos casos por Estado"
+        <po-chart *ngIf="newCasesPerStateData.length > 0" class="po-lg-4 po-mt-2" [p-height]="466" p-title="Novos casos por Estado"
             [p-series]="newCasesPerStateData" [p-type]="newCasesPerStateType">
         </po-chart>
         <po-container *ngIf="lineChartData.length > 0" class="po-lg-8 po-mt-2">
