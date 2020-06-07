@@ -27,7 +27,7 @@
                     </div>
                     <div *ngIf="totalCounties > 0" class="po-text-center">municípios</div>
                 </po-widget>
-                <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="municípios com casos">
+                <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Municípios com casos">
                     <div *ngIf="totalCountiesWithCases == 0" class="po-font-text-smaller po-text-center">Carregando...
                     </div>
                     <div *ngIf="totalCountiesWithCases > 0" class="po-font-subtitle po-text-center">
@@ -35,7 +35,7 @@
                     <div *ngIf="totalCountiesWithCases > 0" class="po-text-center">
                         {{(totalCountiesWithCases / totalCounties) | percent }} tem casos</div>
                 </po-widget>
-                <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="municípios com mortes">
+                <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Municípios com mortes">
                     <div *ngIf="totalCountiesWithDeaths == 0" class="po-font-text-smaller po-text-center">Carregando...
                     </div>
                     <div *ngIf="totalCountiesWithDeaths > 0" class="po-font-subtitle po-text-center">
