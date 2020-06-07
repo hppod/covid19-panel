@@ -41,11 +41,9 @@
             <span class="date-updated">Dados atualizados em {{case['date'] | date: 'dd/MM/yyyy'}}</span>
         </po-container>
     </po-container>
-    <nav *ngIf="Data">
-        <ul class="pagination">
-            <pagination-controls class="my-pagination" (pageChange)="getPage($event)" previousLabel="Anterior"
-                nextLabel="Próximo">
-            </pagination-controls>
-        </ul>
-    </nav>
+    <br />
+    <span *ngIf="Data.length > 0" style="text-align: center;">
+        <pagination-controls (pageChange)="getPage($event)" previousLabel="Anterior" nextLabel="Próximo">
+        </pagination-controls>
+    </span>
 </po-page-detail>

@@ -20,7 +20,7 @@ export class ByCityComponent implements OnInit, OnDestroy {
   p: number
   count: number
   stateSelected: boolean = false
-  Data: City[]
+  Data: City[] = new Array
   SearchByStateForm: FormGroup
   States: PoComboOption[] = new Array()
   Districts: PoComboOption[] = new Array()
@@ -37,6 +37,7 @@ export class ByCityComponent implements OnInit, OnDestroy {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false
     this._service.params = this._service.params.append('is_last', 'True')
     this._service.params = this._service.params.append('page', '1')
+    this._service.params = this._service.params.append('place_type', 'city')
     this._service.params = this._service.params.append('page_size', this.limit.toString())
     this.getDataCasos()
     this.getStates()
@@ -56,7 +57,7 @@ export class ByCityComponent implements OnInit, OnDestroy {
   getDataCasos() {
     this.isLoading = true
     this.request = this._service.getDataCasos().subscribe(response => {
-      this.Data = response.body['results']
+      this.checkDataReceived(response.body['results'])
       this.count = response.body['count']
       this.isLoading = false
     }, err => {
@@ -64,8 +65,17 @@ export class ByCityComponent implements OnInit, OnDestroy {
     })
   }
 
+  checkDataReceived(data: City[]) {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i]['city'] != 'Importados/Indefinidos') {
+        this.Data.push(data[i])
+      }
+    }
+  }
+
   getPage(page: number) {
-    this.Data = null
+    window.scroll(0,0)
+    this.Data = new Array()
     this.p = page
     this._service.params = this._service.params.set('page', page.toString())
     this.getDataCasos()
@@ -74,14 +84,18 @@ export class ByCityComponent implements OnInit, OnDestroy {
   onChangeState($event) {
     if ($event == null || $event == undefined) {
       this.stateSelected = false
+      this.p = 1
+      this._service.params = this._service.params.set('page', '1')
       this._service.params = this._service.params.delete('state')
-      this.Data = null
+      this.Data = new Array()
       this.getDataCasos()
     } else {
+      this.p = 1
+      this._service.params = this._service.params.set('page', '1')
       this._service.params = this._service.params.append('state', $event)
       this.stateSelected = true
       this.getDistricts($event)
-      this.Data = null
+      this.Data = new Array()
       this.getDataCasos()
     }
   }
@@ -110,17 +124,23 @@ export class ByCityComponent implements OnInit, OnDestroy {
 
   onChangeDistrict($event) {
     if ($event == null || $event == undefined) {
+      this.p = 1
+      this._service.params = this._service.params.set('page', '1')
       this._service.params = this._service.params.delete('city')
-      this.Data = null
+      this.Data = new Array()
       this.getDataCasos()
     } else {
+      this.p = 1
+      this._service.params = this._service.params.set('page', '1')
       this._service.params = this._service.params.append('city', $event)
-      this.Data = null
+      this.Data = new Array()
       this.getDataCasos()
     }
   }
 
   clearConditionsClick() {
+    this.p = 1
+    this._service.params = this._service.params.set('page', '1')
     this.stateSelected = false
     this._service.params = this._service.params.delete('city')
     this._service.params = this._service.params.delete('state')
