@@ -29,12 +29,17 @@
         </po-container>
     </div>
     <div class="po-row">
-        <po-chart *ngIf="newCasesPerStateData.length > 0" class="po-lg-4 po-mt-2" [p-height]="466" p-title="Novos casos por Estado"
-            [p-series]="newCasesPerStateData" [p-type]="newCasesPerStateType">
+        <po-chart *ngIf="newCasesPerStateData.length > 0" class="po-lg-4 po-mt-2" [p-height]="480"
+            p-title="Novos casos por Estado" [p-series]="newCasesPerStateData" [p-type]="newCasesPerStateType">
         </po-chart>
-        <po-container *ngIf="lineChartData.length > 0" class="po-lg-8 po-mt-2">
-            <span class="po-font-text-bold">Curva epidemiológica</span>
-            <canvas *ngIf="lineChartData" baseChart width="400" height="200" [datasets]="lineChartData"
+        <po-container class="po-lg-8 po-mt-2">
+            <po-container [p-no-border]="true" class="po-lg-8">
+                <span class="po-font-text-bold">Curva epidemiológica</span>
+            </po-container>
+            <po-container [p-no-border]="true" *ngIf="lineChartData.length == 0" class="po-lg-12 po-mt-3">
+                <app-loading [condition]="true"></app-loading>
+            </po-container>
+            <canvas *ngIf="lineChartData.length > 0" baseChart width="400" height="200" [datasets]="lineChartData"
                 [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
                 [legend]="lineChartLegend" [chartType]="lineChartType" [plugins]="lineChartPlugins">
             </canvas>

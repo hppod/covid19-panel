@@ -15,8 +15,8 @@ export class LoadingComponent implements OnInit {
   }
 
   styles: Partial<CSSStyleDeclaration> = {
-    marginLeft: '550px',
-    marginTop: '120px'
+    marginLeft: '275px',
+    marginTop: '0px'
   }
 
   constructor() { }
