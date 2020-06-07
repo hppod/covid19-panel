@@ -1,0 +1,71 @@
+<app-error [condition]="statusResponse == 500 "></app-error>
+<po-page-detail *ngIf="statusResponse == 200" p-title="Casos no País">
+    <span class="date-updated">Dados atualizados em {{dateOfData | date: 'dd/MM/yyyy'}}</span>
+    <div class="po-row">
+        <po-widget class="po-lg-4 po-mt-2" p-height="200" p-primary-label="Ver detalhado" p-title="Casos"
+            (p-primary-action)="openModal('cases')">
+            <div *ngIf="numberOfCases == 0 && numberOfNewCases == 0" class="po-font-text-smaller po-text-center">
+                Carregando...
+            </div>
+            <div *ngIf="numberOfCases > 0" class="po-font-subtitle po-text-center">{{numberOfCases | number}}</div>
+            <div *ngIf="numberOfNewCases > 0" class="po-text-center">{{numberOfNewCases | number}} novos</div>
+        </po-widget>
+        <po-widget class="po-lg-4 po-mt-2" p-height="200" p-primary-label="Ver detalhado" p-title="Mortes"
+            (p-primary-action)="openModal('deaths')">
+            <div *ngIf="numberOfDeaths == 0 && numberOfNewDeaths == 0" class="po-font-text-smaller po-text-center">
+                Carregando...
+            </div>
+            <div *ngIf="numberOfDeaths > 0" class="po-font-subtitle po-text-center">{{numberOfDeaths | number }}</div>
+            <div *ngIf="numberOfNewDeaths > 0" class="po-text-center">{{numberOfNewDeaths | number}} novas</div>
+        </po-widget>
+        <po-container p-height="200" class="po-lg-4 po-mt-2">
+            <div class="po-row">
+                <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Total de munícipios">
+                    <div *ngIf="totalCounties == 0" class="po-font-text-smaller po-text-center">Carregando...
+                    </div>
+                    <div *ngIf="totalCounties > 0" class="po-font-subtitle po-text-center">{{totalCounties | number}}
+                    </div>
+                    <div *ngIf="totalCounties > 0" class="po-text-center">munícipios</div>
+                </po-widget>
+                <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Munícipios com casos">
+                    <div *ngIf="totalCountiesWithCases == 0" class="po-font-text-smaller po-text-center">Carregando...
+                    </div>
+                    <div *ngIf="totalCountiesWithCases > 0" class="po-font-subtitle po-text-center">
+                        {{totalCountiesWithCases | number}}</div>
+                    <div *ngIf="totalCountiesWithCases > 0" class="po-text-center">
+                        {{(totalCountiesWithCases / totalCounties) | percent }} tem casos</div>
+                </po-widget>
+                <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Munícipios com mortes">
+                    <div *ngIf="totalCountiesWithDeaths == 0" class="po-font-text-smaller po-text-center">Carregando...
+                    </div>
+                    <div *ngIf="totalCountiesWithDeaths > 0" class="po-font-subtitle po-text-center">
+                        {{totalCountiesWithDeaths | number}}</div>
+                    <div *ngIf="totalCountiesWithDeaths > 0" class="po-text-center">
+                        {{(totalCountiesWithDeaths / totalCounties) | percent }} tem mortes
+                    </div>
+                </po-widget>
+            </div>
+        </po-container>
+    </div>
+    <div class="po-row">
+        <po-chart *ngIf="newCasesPerStateData.length > 0" class="po-lg-4 po-mt-2" [p-height]="480"
+            p-title="Novos casos por Estado" [p-series]="newCasesPerStateData" [p-type]="newCasesPerStateType">
+        </po-chart>
+        <po-container class="po-lg-8 po-mt-2">
+            <po-container [p-no-border]="true" class="po-lg-8">
+                <span class="po-font-text-bold">Número de casos acumulados no Brasil</span>
+            </po-container>
+            <po-container [p-no-border]="true" *ngIf="lineChartData.length == 0" class="po-lg-12 po-mt-3">
+                <app-loading [condition]="true"></app-loading>
+            </po-container>
+            <canvas *ngIf="lineChartData.length > 0" baseChart width="400" height="200" [datasets]="lineChartData"
+                [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+                [legend]="lineChartLegend" [chartType]="lineChartType" [plugins]="lineChartPlugins">
+            </canvas>
+        </po-container>
+    </div>
+</po-page-detail>
+
+<po-modal #detailsModal [p-title]="titleDetailsModal">
+    <po-table [p-columns]="columnsDetails" [p-items]="itemsDetails"> </po-table>
+</po-modal>
