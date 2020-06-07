@@ -22,6 +22,7 @@ import { AboutComponent } from './about/about.component';
 import { ErrorComponent } from './components/error/error.component';
 import { LoadingFullComponent } from './components/loading-full/loading-full.component';
 import { PreventionComponent } from './prevention/prevention.component';
+import { NoDataComponent } from './components/no-data/no-data.component';
 
 export function playerFactory() {
   return player
@@ -39,7 +40,8 @@ registerLocaleData(localePt, 'pt-BR');
     AboutComponent,
     ErrorComponent,
     LoadingFullComponent,
-    PreventionComponent
+    PreventionComponent,
+    NoDataComponent
   ],
   imports: [
     BrowserModule,
