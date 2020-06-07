@@ -52,15 +52,6 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   newCasesPerStateType: PoChartType = PoChartType.Donut
   newCasesPerStateData: Array<PoPieChartSeries> = new Array()
 
-  // coffeeConsumption: Array<PoPieChartSeries> = [
-  //   { category: 'Brazil', value: 2796, tooltip: 'Brazil (South America)' },
-  //   { category: 'Vietnam', value: 1076, tooltip: 'Vietnam (Asia)' },
-  //   { category: 'Colombia', value: 688, tooltip: 'Colombia (South America)' },
-  //   { category: 'Indonesia', value: 682, tooltip: 'Indonesia (Asia/Oceania)' },
-  //   { category: 'Vietnam', value: 645, tooltip: 'Vietnam (Asia)' },
-  //   { category: 'Peru', value: 154, tooltip: 'Peru (South America)' }
-  // ]
-
   @ViewChild('detailsModal', { static: true }) detailsModalElement: PoModalComponent
 
   public readonly columnsDetails: Array<PoTableColumn> = [
@@ -99,6 +90,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
       this.numberOfNewDeaths = this.calculateNewDeaths(this.Data)
       this.itemsCasesDetails = this.setCasesDetails(this.Data)
       this.itemsDeathsDetails = this.setDeathsDetails(this.Data)
+      this.newCasesPerStateData = this.setNewCasesByState(this.Data)
       this.isLoading = false
     }, err => {
       this.isLoading = false
@@ -196,6 +188,17 @@ export class ByCountryComponent implements OnInit, OnDestroy {
       }
     }
     return countiesWithDeaths
+  }
+
+  setNewCasesByState(data: CasoFull[]): Array<PoPieChartSeries> {
+    let casesByState: PoPieChartSeries[] = new Array()
+    for (let i = 0; i < data.length; i++) {
+      casesByState.push({
+        category: data[i]['state'],
+        value: data[i]['new_confirmed']
+      })
+      return casesByState
+    }
   }
 
   setCasesDetails(data: CasoFull[]): any[] {
