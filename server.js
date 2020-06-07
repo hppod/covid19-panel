@@ -11,7 +11,7 @@ app.use((req, res, next) => {
     }
 })
 
-app.use(express.static(__dirname + '/dist/covid19-panel'))
+app.use(express.static(__dirname + 'dist/covid19-panel'))
 
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
@@ -22,7 +22,7 @@ app.use(function (req, res, next) {
 })
 
 app.get('*', (req, res, next) => {
-    res.sendFile(path.join(__dirname + '/dist/covid19-panel/index.html'))
+    res.sendFile(path.join(__dirname + 'dist/covid19-panel/index.html'))
 })
 
 app.listen(process.env.PORT || 8080)
