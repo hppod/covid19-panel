@@ -2,27 +2,44 @@
     <div class="po-row">
         <po-widget class="po-lg-4 po-mt-2" p-height="200" p-primary-label="Ver detalhado" p-title="Casos"
             (p-primary-action)="openModal('cases')">
-            <div class="po-font-subtitle po-text-center">{{numberOfCases | number}}</div>
-            <div class="po-text-center">{{numberOfNewCases | number}} novos</div>
+            <div *ngIf="numberOfCases == 0 && numberOfNewCases == 0" class="po-font-text-smaller po-text-center">
+                Carregando...
+            </div>
+            <div *ngIf="numberOfCases > 0" class="po-font-subtitle po-text-center">{{numberOfCases | number}}</div>
+            <div *ngIf="numberOfNewCases > 0" class="po-text-center">{{numberOfNewCases | number}} novos</div>
         </po-widget>
         <po-widget class="po-lg-4 po-mt-2" p-height="200" p-primary-label="Ver detalhado" p-title="Mortes"
             (p-primary-action)="openModal('deaths')">
-            <div class="po-font-subtitle po-text-center">{{numberOfDeaths | number }}</div>
-            <div class="po-text-center">{{numberOfNewDeaths | number}} novas</div>
+            <div *ngIf="numberOfDeaths == 0 && numberOfNewDeaths == 0" class="po-font-text-smaller po-text-center">
+                Carregando...
+            </div>
+            <div *ngIf="numberOfDeaths > 0" class="po-font-subtitle po-text-center">{{numberOfDeaths | number }}</div>
+            <div *ngIf="numberOfNewDeaths > 0" class="po-text-center">{{numberOfNewDeaths | number}} novas</div>
         </po-widget>
         <po-container p-height="200" class="po-lg-4 po-mt-2">
             <div class="po-row">
                 <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Total de munícipios">
-                    <div class="po-font-subtitle po-text-center">{{totalCounties | number}}</div>
-                    <div class="po-text-center">munícipios</div>
+                    <div *ngIf="totalCounties == 0" class="po-font-text-smaller po-text-center">Carregando...
+                    </div>
+                    <div *ngIf="totalCounties > 0" class="po-font-subtitle po-text-center">{{totalCounties | number}}
+                    </div>
+                    <div *ngIf="totalCounties > 0" class="po-text-center">munícipios</div>
                 </po-widget>
                 <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Munícipios com casos">
-                    <div class="po-font-subtitle po-text-center">{{totalCountiesWithCases | number}}</div>
-                    <div class="po-text-center">{{(totalCountiesWithCases / totalCounties) | percent }} tem casos</div>
+                    <div *ngIf="totalCountiesWithCases == 0" class="po-font-text-smaller po-text-center">Carregando...
+                    </div>
+                    <div *ngIf="totalCountiesWithCases > 0" class="po-font-subtitle po-text-center">
+                        {{totalCountiesWithCases | number}}</div>
+                    <div *ngIf="totalCountiesWithCases > 0" class="po-text-center">
+                        {{(totalCountiesWithCases / totalCounties) | percent }} tem casos</div>
                 </po-widget>
                 <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Munícipios com mortes">
-                    <div class="po-font-subtitle po-text-center">{{totalCountiesWithDeaths | number}}</div>
-                    <div class="po-text-center">{{(totalCountiesWithDeaths / totalCounties) | percent }} tem mortes
+                    <div *ngIf="totalCountiesWithDeaths == 0" class="po-font-text-smaller po-text-center">Carregando...
+                    </div>
+                    <div *ngIf="totalCountiesWithDeaths > 0" class="po-font-subtitle po-text-center">
+                        {{totalCountiesWithDeaths | number}}</div>
+                    <div *ngIf="totalCountiesWithDeaths > 0" class="po-text-center">
+                        {{(totalCountiesWithDeaths / totalCounties) | percent }} tem mortes
                     </div>
                 </po-widget>
             </div>
