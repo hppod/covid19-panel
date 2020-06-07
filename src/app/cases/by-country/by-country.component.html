@@ -1,0 +1,39 @@
+<po-page-detail p-title="Casos no País">
+    <div class="po-row">
+        <po-widget class="po-lg-4 po-mt-2" p-height="200" p-primary-label="Detalhes" p-title="Casos"
+            (p-primary-action)="openModal('cases')">
+            <div class="po-font-subtitle po-text-center">{{numberOfCases | number}}</div>
+            <div class="po-text-center">{{numberOfNewCases | number}} novos</div>
+        </po-widget>
+        <po-widget class="po-lg-4 po-mt-2" p-height="200" p-primary-label="Detalhes" p-title="Mortes"
+            (p-primary-action)="openModal('deaths')">
+            <div class="po-font-subtitle po-text-center">{{numberOfDeaths | number }}</div>
+            <div class="po-text-center">{{numberOfNewDeaths | number}} novas</div>
+        </po-widget>
+        <po-container class="po-lg-4 po-mt-2">
+            <div class="po-row">
+                <po-widget class="po-md-12 po-lg-12 po-mt-2" p-title="População brasileira estimada em 2019">
+                    <div class="po-font-subtitle po-text-center">{{populationBrazil | number}}</div>
+                    <div class="po-text-center">habitantes</div>
+                </po-widget>
+                <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Total de munícipios">
+                    <div class="po-font-subtitle po-text-center">{{totalCounties | number}}</div>
+                    <div class="po-text-center">munícipios</div>
+                </po-widget>
+                <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Munícipios com casos">
+                    <div class="po-font-subtitle po-text-center">{{totalCountiesWithCases | number}}</div>
+                    <div class="po-text-center">{{(totalCountiesWithCases / totalCounties) | percent }} tem casos</div>
+                </po-widget>
+                <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Munícipios com mortes">
+                    <div class="po-font-subtitle po-text-center">{{totalCountiesWithDeaths | number}}</div>
+                    <div class="po-text-center">{{(totalCountiesWithDeaths / totalCounties) | percent }} tem mortes
+                    </div>
+                </po-widget>
+            </div>
+        </po-container>
+    </div>
+</po-page-detail>
+
+<po-modal #detailsModal [p-title]="titleDetailsModal">
+    <po-table [p-columns]="columnsDetails" [p-items]="itemsDetails"> </po-table>
+</po-modal>

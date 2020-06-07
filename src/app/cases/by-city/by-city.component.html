@@ -30,13 +30,13 @@
             <hr />
             <div class="po-row">
                 <po-info class="po-md-12" p-orientation="horizontal" p-label="População estimada"
-                    p-value="{{case['estimated_population_2019']}}">
+                    p-value="{{case['estimated_population_2019'] | number}}">
                 </po-info>
                 <po-info class="po-md-12" p-orientation="horizontal" p-label="Casos confirmados"
-                    p-value="{{case['confirmed']}}">
+                    p-value="{{case['confirmed'] | number}}">
                 </po-info>
                 <po-info class="po-md-12" p-orientation="horizontal" p-label="Número de mortes"
-                    p-value="{{case['deaths']}}"> </po-info>
+                    p-value="{{case['deaths'] | number}}"> </po-info>
             </div>
             <span class="date-updated">Dados atualizados em {{case['date'] | date: 'dd/MM/yyyy'}}</span>
         </po-container>
