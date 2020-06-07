@@ -5,6 +5,8 @@ import { CasoFull } from "./../../models/caso_full.model"
 import { PoModalComponent, PoTableColumn } from '@po-ui/ng-components';
 import { Caso } from 'src/app/models/caso.model';
 import { Router } from '@angular/router';
+import { ChartDataSets, ChartOptions } from 'chart.js';
+import { Color, Label } from 'ng2-charts';
 
 @Component({
   selector: 'app-by-country',
@@ -12,6 +14,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./by-country.component.css']
 })
 export class ByCountryComponent implements OnInit, OnDestroy {
+
+
 
   request: Subscription
   isLoading: boolean
@@ -28,6 +32,22 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   totalCountiesWithCases: number
   totalCountiesWithDeaths: number
   populationBrazil: number
+  public lineChartData: ChartDataSets[] = []
+  public lineChartLabels: Label[] = new Array()
+  public lineChartLegend = true
+  public lineChartType = 'line'
+  public lineChartPlugins = []
+
+  public lineChartOptions: ChartOptions = {
+    responsive: true
+  }
+
+  public lineChartColors: Color[] = [
+    {
+      borderColor: 'black',
+      backgroundColor: 'rgba(76,94,98,0.3)'
+    }
+  ]
 
   @ViewChild('detailsModal', { static: true }) detailsModalElement: PoModalComponent
 
@@ -78,7 +98,18 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     this.request = this._service.getDataCasosFull().subscribe(response => {
       this.totalCountiesWithCases = response.body['count']
       this.getDataDeaths()
+      this.isLoading = false
+    }, err => {
+      this.isLoading = false
+    })
+  }
 
+  getDataCasosEpidemiologicalCurve() {
+    this._service.params = this._service.params.set('place_type', 'state')
+    this._service.params = this._service.params.set('is_last', 'False')
+    this._service.params = this._service.params.set('page_size', '10000')
+    this.request = this._service.getDataCasosFull().subscribe(response => {
+      this.getDataLineChartEpidemiologicalCurve(response.body['results'])
       this.isLoading = false
     }, err => {
       this.isLoading = false
@@ -91,6 +122,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     this.request = this._service.getDataCasos().subscribe(response => {
       this.totalCountiesWithDeaths = this.calculateDeathsOnCounties(response.body['results'])
       this.populationBrazil = this.calculatePopulation(response.body['results'])
+      this.getDataCasosEpidemiologicalCurve()
       this.isLoading = false
     }, err => {
       this.isLoading = false
@@ -188,6 +220,20 @@ export class ByCountryComponent implements OnInit, OnDestroy {
       population = population + data[i]['estimated_population_2019']
     }
     return population
+  }
+
+  getDataLineChartEpidemiologicalCurve(data: CasoFull[]) {
+    let cases: number = 0
+    let casesData: number[] = new Array()
+    for (let i = data.length - 1; i > -1; i--) {
+      this.lineChartLabels.push(data[i]['last_available_date'])
+      cases = cases + data[i]['new_confirmed']
+      casesData.push(cases)
+    }
+    this.lineChartData = [{
+      data: casesData,
+      label: 'Nº de casos por data'
+    }]
   }
 
   openModal(type) {

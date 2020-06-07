@@ -10,12 +10,12 @@
             <div class="po-font-subtitle po-text-center">{{numberOfDeaths | number }}</div>
             <div class="po-text-center">{{numberOfNewDeaths | number}} novas</div>
         </po-widget>
-        <po-container class="po-lg-4 po-mt-2">
+        <po-container p-height="200" class="po-lg-4 po-mt-2">
             <div class="po-row">
-                <po-widget class="po-md-12 po-lg-12 po-mt-2" p-title="População brasileira estimada em 2019">
+                <!-- <po-widget class="po-md-12 po-lg-12 po-mt-2" p-title="População brasileira estimada em 2019">
                     <div class="po-font-subtitle po-text-center">{{populationBrazil | number}}</div>
                     <div class="po-text-center">habitantes</div>
-                </po-widget>
+                </po-widget> -->
                 <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Total de munícipios">
                     <div class="po-font-subtitle po-text-center">{{totalCounties | number}}</div>
                     <div class="po-text-center">munícipios</div>
@@ -30,6 +30,19 @@
                     </div>
                 </po-widget>
             </div>
+        </po-container>
+    </div>
+    <div class="po-row">
+        <po-container *ngIf="lineChartData.length > 0" class="po-lg-4 po-mt-2">
+            <span class="po-font-text-bold">Casos por Estado</span>
+
+        </po-container>
+        <po-container *ngIf="lineChartData.length > 0" class="po-lg-8 po-mt-2">
+            <span class="po-font-text-bold">Curva epidemiológica</span>
+            <canvas *ngIf="lineChartData" baseChart width="400" height="200" [datasets]="lineChartData"
+                [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors"
+                [legend]="lineChartLegend" [chartType]="lineChartType" [plugins]="lineChartPlugins">
+            </canvas>
         </po-container>
     </div>
 </po-page-detail>
