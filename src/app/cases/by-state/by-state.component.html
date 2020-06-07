@@ -1,4 +1,6 @@
-<po-page-detail p-title="Casos por Estado">
+<app-error [condition]="statusResponse == 500 "></app-error>
+<app-loading-full [condition]="isLoading"></app-loading-full>
+<po-page-detail *ngIf="statusResponse == 200 && !isLoading" p-title="Casos por Estado">
     <po-container [p-no-shadow]="true" [p-no-border]="true">
         <po-container *ngFor="let case of Data" class="po-lg-3 po-mt-2">
             <div class="po-row">

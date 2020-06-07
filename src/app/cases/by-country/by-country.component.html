@@ -1,4 +1,5 @@
-<po-page-detail p-title="Casos no País">
+<app-error [condition]="statusResponse == 500 "></app-error>
+<po-page-detail *ngIf="statusResponse == 200" p-title="Casos no País">
     <div class="po-row">
         <po-widget class="po-lg-4 po-mt-2" p-height="200" p-primary-label="Ver detalhado" p-title="Casos"
             (p-primary-action)="openModal('cases')">

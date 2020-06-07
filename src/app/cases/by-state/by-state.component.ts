@@ -12,6 +12,7 @@ import { Caso } from "../../models/caso.model"
 export class ByStateComponent implements OnInit, OnDestroy {
 
   limit: number = 50
+  statusResponse: number
   request: Subscription
   isLoading: boolean
   Data: Caso[] = new Array
@@ -39,8 +40,10 @@ export class ByStateComponent implements OnInit, OnDestroy {
     this.isLoading = true
     this.request = this._service.getDataCasos().subscribe(response => {
       this.Data = response.body['results']
+      this.statusResponse = response.status
       this.isLoading = false
     }, err => {
+      this.statusResponse = 500
       this.isLoading = false
     })
   }

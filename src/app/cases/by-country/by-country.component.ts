@@ -18,7 +18,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
 
 
   request: Subscription
-  isLoading: boolean
+  statusResponse: number
   Data: CasoFull[] = new Array()
   titleDetailsModal: string
   itemsDetails: Array<any> = new Array()
@@ -81,7 +81,6 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   }
 
   getDataCasosFull() {
-    this.isLoading = true
     this.request = this._service.getDataCasosFull().subscribe(response => {
       this.Data = response.body['results']
       this.numberOfCases = this.calculateCases(this.Data)
@@ -91,9 +90,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
       this.itemsCasesDetails = this.setCasesDetails(this.Data)
       this.itemsDeathsDetails = this.setDeathsDetails(this.Data)
       this.newCasesPerStateData = this.setNewCasesByState(this.Data)
-      this.isLoading = false
     }, err => {
-      this.isLoading = false
     })
   }
 
@@ -101,10 +98,10 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     this._service.params = this._service.params.set('place_type', 'city')
     this.request = this._service.getDataCasosFull().subscribe(response => {
       this.totalCountiesWithCases = response.body['count']
+      this.statusResponse = response.status
       this.getDataDeaths()
-      this.isLoading = false
     }, err => {
-      this.isLoading = false
+      this.statusResponse = 500
     })
   }
 
@@ -114,9 +111,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     this._service.params = this._service.params.set('page_size', '10000')
     this.request = this._service.getDataCasosFull().subscribe(response => {
       this.getDataLineChartEpidemiologicalCurve(response.body['results'])
-      this.isLoading = false
     }, err => {
-      this.isLoading = false
     })
   }
 
@@ -127,20 +122,16 @@ export class ByCountryComponent implements OnInit, OnDestroy {
       this.totalCountiesWithDeaths = this.calculateDeathsOnCounties(response.body['results'])
       this.populationBrazil = this.calculatePopulation(response.body['results'])
       this.getDataCasosEpidemiologicalCurve()
-      this.isLoading = false
     }, err => {
-      this.isLoading = false
     })
   }
 
   getDataCounties() {
-    this.isLoading = true
     this.request = this._service.getCounties().subscribe(response => {
       this.Data = response.body
       this.totalCounties = this.Data.length
       this.getDataCasos()
     }, err => {
-      this.isLoading = false
     })
   }
 

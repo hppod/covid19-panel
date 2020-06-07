@@ -19,6 +19,8 @@ import { ByCityComponent } from './cases/by-city/by-city.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { ByCountryComponent } from './cases/by-country/by-country.component';
 import { AboutComponent } from './about/about.component';
+import { ErrorComponent } from './components/error/error.component';
+import { LoadingFullComponent } from './components/loading-full/loading-full.component';
 
 export function playerFactory() {
   return player
@@ -33,7 +35,9 @@ registerLocaleData(localePt, 'pt-BR');
     ByCityComponent,
     LoadingComponent,
     ByCountryComponent,
-    AboutComponent
+    AboutComponent,
+    ErrorComponent,
+    LoadingFullComponent
   ],
   imports: [
     BrowserModule,
