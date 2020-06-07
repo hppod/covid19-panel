@@ -24,14 +24,14 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   itemsDetails: Array<any> = new Array()
   itemsCasesDetails: Array<any> = new Array()
   itemsDeathsDetails: Array<any> = new Array()
-  numberOfCases: number
-  numberOfDeaths: number
-  numberOfNewCases: number
-  numberOfNewDeaths: number
-  totalCounties: number
-  totalCountiesWithCases: number
-  totalCountiesWithDeaths: number
-  populationBrazil: number
+  numberOfCases: number = 0
+  numberOfDeaths: number = 0
+  numberOfNewCases: number = 0
+  numberOfNewDeaths: number = 0
+  totalCounties: number = 0
+  totalCountiesWithCases: number = 0
+  totalCountiesWithDeaths: number = 0
+  populationBrazil: number = 0
   public lineChartData: ChartDataSets[] = []
   public lineChartLabels: Label[] = new Array()
   public lineChartLegend = true

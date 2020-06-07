@@ -16,6 +16,7 @@ export class ByCityComponent implements OnInit, OnDestroy {
   limit: number = 200
   request: Subscription
   isLoading: boolean
+  statusResponse: number
   p: number
   count: number
   stateSelected: boolean = false
@@ -57,9 +58,11 @@ export class ByCityComponent implements OnInit, OnDestroy {
     this.isLoading = true
     this.request = this._service.getDataCasos().subscribe(response => {
       this.checkDataReceived(response.body['results'])
+      this.statusResponse = response.status
       this.count = response.body['count']
       this.isLoading = false
     }, err => {
+      this.statusResponse = 500
       this.isLoading = false
     })
   }
