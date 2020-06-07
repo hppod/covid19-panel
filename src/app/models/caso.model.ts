@@ -1,4 +1,4 @@
-export interface City {
+export interface Caso {
     city: string,
     city_ibge_code: string,
     confirmed: number,

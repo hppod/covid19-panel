@@ -11,7 +11,7 @@ export class AppComponent {
   isCollapsed: Boolean = false
 
   MenuItems: PoNavbarItem[] = [
-    { label: 'Estado', link: '/cases/by-state' },
+    { label: 'Estados', link: '/cases/by-state' },
     { label: 'Cidades', link: '/cases/by-city' }
   ]
 
