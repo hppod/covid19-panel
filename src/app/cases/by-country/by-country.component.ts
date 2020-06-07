@@ -20,6 +20,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   request: Subscription
   statusResponse: number
   Data: CasoFull[] = new Array()
+  dateOfData: string
   titleDetailsModal: string
   itemsDetails: Array<any> = new Array()
   itemsCasesDetails: Array<any> = new Array()
@@ -83,6 +84,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   getDataCasosFull() {
     this.request = this._service.getDataCasosFull().subscribe(response => {
       this.Data = response.body['results']
+      this.dateOfData = response.body['results'][0]['date']
       this.numberOfCases = this.calculateCases(this.Data)
       this.numberOfDeaths = this.calculateDeaths(this.Data)
       this.numberOfNewCases = this.calculateNewCases(this.Data)
