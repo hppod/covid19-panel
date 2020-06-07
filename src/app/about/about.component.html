@@ -1,6 +1,6 @@
 <po-page-detail p-title="Sobre">
     <div class="po-row">
-        <po-widget class="po-sm-12 po-md-6 po-lg-4 po-mt-2" p-title="Desenvolvido por" p-primary-label="Github"
+        <po-widget class="po-sm-12 po-md-6 po-lg-4 po-mt-2" p-height="348" p-title="Desenvolvido por" p-primary-label="Github"
             p-secondary-label="Linkedin" (p-primary-action)="goToLink('https://github.com/hppod')"
             (p-secondary-action)="goToLink('http://bit.ly/linkedin-hppod')">
             <po-avatar class=" po-md-4" p-size="lg"
@@ -11,8 +11,9 @@
                 <p>contato@brasileocoronavirus.com.br</p>
             </div>
         </po-widget>
-        <po-widget class="po-sm-12 po-md-6 po-lg-8 po-mt-2" p-height="213" p-title="Dados">
+        <po-widget class="po-sm-12 po-md-6 po-lg-8 po-mt-2" p-title="Créditos">
             <div class="po-md-12">
+                <h4 class="po-font-text-large-bold">Dados</h4>
                 <p>Os dados utilizados nesta aplicação são fornecidos pelas 27 Secretarias Estaduais de Saúde e
                     disponibilizados pelos voluntários da <a target="_blank" href="https://brasil.io/home/">
                         <b>Brasil.io</b></a>. Sem o
@@ -23,9 +24,21 @@
                         href="https://docs.google.com/document/d/1escumcbjS8inzAKvuXOQocMcQ8ZCqbyHU5X5hFrPpn4/edit#heading=h.dridhyh3vung"
                         target="_blank">clique aqui</a>
                 </p>
+                <hr />
+                <h4 class="po-font-text-large-bold">Biblioteca de Componentes</h4>
                 <p>
-                    Os dados e esta aplicação estão sob a licença (<a
-                        href="https://creativecommons.org/licenses/by-sa/4.0/legalcode" target="_blank">CC-BY-SA</a>)
+                    <a href="https://po-ui.io/" target="_blank">PO UI</a> sob a licença <a href="https://github.com/po-ui/po-angular/blob/master/LICENSE"
+                    target="_blank">MIT License</a>
+                </p>
+                <hr />
+                <h4 class="po-font-text-large-bold">Licença</h4>
+                <p>
+                    Os dados estão sob a licença <a href="https://creativecommons.org/licenses/by-sa/4.0/legalcode"
+                        target="_blank">CC-BY-SA</a>
+                </p>
+                <p>
+                    A aplicação está sob a licença <a href="https://github.com/hppod/covid19-panel/blob/master/LICENSE"
+                        target="_blank">MIT License</a>
                 </p>
             </div>
         </po-widget>
@@ -50,6 +63,10 @@
                 <p>&nbsp;&nbsp;&nbsp; - Gráfico do total de casos acumulados no País.</p>
                 <p class="po-font-text-uppercase">&nbsp; Painel "Estados"</p>
                 <p>&nbsp;&nbsp;&nbsp; - Lista de Estados com número de casos confirmados e número de mortes.</p>
+                <p class="po-font-text-uppercase">&nbsp; Painel "Sobre"</p>
+                <p>&nbsp;&nbsp;&nbsp; - Desenvolvido por e contatos.</p>
+                <p>&nbsp;&nbsp;&nbsp; - Créditos.</p>
+                <p>&nbsp;&nbsp;&nbsp; - Histórico de alterações</p>
             </div>
         </po-widget>
     </div>
