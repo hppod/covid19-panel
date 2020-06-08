@@ -22,6 +22,7 @@ app.use(function (req, res, next) {
 })
 
 app.get('*', (req, res, next) => {
+    console.log('sendFile')
     res.sendFile(path.join(__dirname + '/dist/covid19-panel/index.html'))
 })
 
