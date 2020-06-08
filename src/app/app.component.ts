@@ -14,13 +14,13 @@ export class AppComponent {
   constructor(
     private _router: Router
   ) {
-    this._router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        gtag('config', 'UA-168793761-1', {
-          'page_path': event.urlAfterRedirects
-        })
-      }
-    })
+    // this._router.events.subscribe(event => {
+    //   if (event instanceof NavigationEnd) {
+    //     gtag('config', 'UA-168793761-1', {
+    //       'page_path': event.urlAfterRedirects
+    //     })
+    //   }
+    // })
   }
 
   isCollapsed: Boolean = false
