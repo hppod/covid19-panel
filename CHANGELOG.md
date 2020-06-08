@@ -2,6 +2,10 @@
 
 Log de alterações da aplicação.
 
+**VERSÃO 1.1**
+ - **Brasil** - Correção do sistema de grid no modo responsivo.
+
+
 **VERSÃO 1.0**
  - **Brasil** - Total de casos acumulados no País.
  - **Brasil** Total de novos casos no País em relação ao dia anterior.
