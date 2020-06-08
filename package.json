@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
+    "prestart": "npm install",
     "start": "node server.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "postinstall": "ng build --prod --aot"
+  },
+  "engines": {
+    "node": "12.14.1"
   },
   "private": true,
   "dependencies": {
