@@ -18,16 +18,16 @@
             <div *ngIf="numberOfDeaths > 0" class="po-font-subtitle po-text-center">{{numberOfDeaths | number }}</div>
             <div *ngIf="numberOfNewDeaths > 0" class="po-text-center">{{numberOfNewDeaths | number}} novas</div>
         </po-widget>
-        <po-container p-height="200" class="po-lg-4 po-mt-2">
+        <po-container p-height="200" class="po-lg-4 po-md-12 po-sm-12 po-mt-2">
             <div class="po-row">
-                <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Total de municípios">
+                <po-widget class="po-lg-4 po-mt-2" p-title="Total de municípios">
                     <div *ngIf="totalCounties == 0" class="po-font-text-smaller po-text-center">Carregando...
                     </div>
                     <div *ngIf="totalCounties > 0" class="po-font-subtitle po-text-center">{{totalCounties | number}}
                     </div>
                     <div *ngIf="totalCounties > 0" class="po-text-center">municípios</div>
                 </po-widget>
-                <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Municípios com casos">
+                <po-widget class="po-lg-4 po-mt-2" p-title="Municípios com casos">
                     <div *ngIf="totalCountiesWithCases == 0" class="po-font-text-smaller po-text-center">Carregando...
                     </div>
                     <div *ngIf="totalCountiesWithCases > 0" class="po-font-subtitle po-text-center">
@@ -35,7 +35,7 @@
                     <div *ngIf="totalCountiesWithCases > 0" class="po-text-center">
                         {{(totalCountiesWithCases / totalCounties) | percent }} tem casos</div>
                 </po-widget>
-                <po-widget class="po-md-3 po-lg-4 po-mt-2" p-title="Municípios com mortes">
+                <po-widget class="po-lg-4 po-mt-2" p-title="Municípios com mortes">
                     <div *ngIf="totalCountiesWithDeaths == 0" class="po-font-text-smaller po-text-center">Carregando...
                     </div>
                     <div *ngIf="totalCountiesWithDeaths > 0" class="po-font-subtitle po-text-center">
