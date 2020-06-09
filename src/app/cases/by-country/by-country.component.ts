@@ -156,9 +156,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   calculateNewCases(data: CasoFull[]): number {
     let newCases = 0
     for (let i = 0; i < data.length; i++) {
-      if (data[i]['last_available_date'] == this.today) {
-        newCases = newCases + data[i]['new_confirmed']
-      }
+      newCases = newCases + data[i]['new_confirmed']
     }
     return newCases
   }
@@ -166,9 +164,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   calculateNewDeaths(data: CasoFull[]): number {
     let newDeaths = 0
     for (let i = 0; i < data.length; i++) {
-      if (data[i]['last_available_date'] == this.today) {
-        newDeaths = newDeaths + data[i]['new_deaths']
-      }
+      newDeaths = newDeaths + data[i]['new_deaths']
     }
     return newDeaths
   }
