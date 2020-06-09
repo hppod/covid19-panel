@@ -188,19 +188,43 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   }
 
   calculateNewCases(data: CasoFull[]): number {
-    let newCases = 0
-    for (let i = 0; i < data.length; i++) {
-      newCases = newCases + data[i]['new_confirmed']
-    }
-    return newCases
+    let new_cases: any = new Array()
+    let sum: number = 0
+
+    let cases = data.reduce((obj, { date, new_confirmed }) => {
+      if (!obj[date]) {
+        obj[date] = new Array()
+      }
+      sum = sum + new_confirmed
+      obj[date].push(sum)
+      return obj
+    }, {})
+
+    Object.keys(cases).forEach(function (item) {
+      new_cases.push(cases[item])
+    })
+
+    return new_cases[0][new_cases[0].length - 1]
   }
 
   calculateNewDeaths(data: CasoFull[]): number {
-    let newDeaths = 0
-    for (let i = 0; i < data.length; i++) {
-      newDeaths = newDeaths + data[i]['new_deaths']
-    }
-    return newDeaths
+    let new_deaths: any = new Array()
+    let sum: number = 0
+
+    let cases = data.reduce((obj, { date, new_deaths }) => {
+      if (!obj[date]) {
+        obj[date] = new Array()
+      }
+      sum = sum + new_deaths
+      obj[date].push(sum)
+      return obj
+    }, {})
+
+    Object.keys(cases).forEach(function (item) {
+      new_deaths.push(cases[item])
+    })
+
+    return new_deaths[0][new_deaths[0].length - 1]
   }
 
   calculateDeathsOnCounties(data: Caso[]): number {
