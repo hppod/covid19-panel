@@ -72,6 +72,15 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     }
   ]
 
+  /**Bar chart new deaths */
+  public BarChartDataNewDeathsDataset: ChartDataSets[] = []
+  public BarChartDataNewDeathsLabels: Label[] = new Array()
+  public BarChartDataNewDeathsColors: Color[] = [
+    {
+      backgroundColor: 'rgb(255,0,0)',
+    }
+  ]
+
   newCasesPerStateType: PoChartType = PoChartType.Donut
   newCasesPerStateData: Array<PoPieChartSeries> = new Array()
 
@@ -137,6 +146,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
       this.getDataLineChartAcumulatedCases(response.body['results'])
       this.getDataLineChartAcumulatedDeaths(response.body['results'])
       this.getDataBarChartNewCases(response.body['results'])
+      this.getDataBarChartNewDeaths(response.body['results'])
     }, err => {
     })
   }
@@ -335,6 +345,30 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     this.BarChartDataNewCasesDataset = [{
       data: new_cases.reverse(),
       label: 'Nº de novos casos por dia'
+    }]
+  }
+
+  getDataBarChartNewDeaths(data: CasoFull[]) {
+    let new_deaths: number[] = new Array()
+    let dates: string[] = new Array()
+
+    let deaths = data.reduce((obj, { date, new_deaths }) => {
+      if (!obj[date]) {
+        obj[date] = new Array()
+      }
+      obj[date].push(new_deaths)
+      return obj
+    }, {})
+
+    Object.keys(deaths).forEach(function (item) {
+      dates.push(item)
+      new_deaths.push(deaths[item][0])
+    })
+
+    this.BarChartDataNewDeathsLabels = dates.reverse()
+    this.BarChartDataNewDeathsDataset = [{
+      data: new_deaths.reverse(),
+      label: 'Nº de novas mortes por dia'
     }]
   }
 

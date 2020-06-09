@@ -83,6 +83,16 @@
             [plugins]="ChartPlugins">
         </canvas>
     </po-container>
+    <po-container class="po-lg-6 po-mt-2">
+        <po-container [p-no-border]="true" class="po-lg-8">
+            <span class="po-font-text-bold">Número de novas mortes por dia no Brasil</span>
+        </po-container>
+        <canvas *ngIf="BarChartDataNewDeathsDataset.length > 0" baseChart width="400" height="200"
+            [datasets]="BarChartDataNewDeathsDataset" [labels]="BarChartDataNewDeathsLabels" [options]="ChartOptions"
+            [colors]="BarChartDataNewDeathsColors" [legend]="ChartLegend" [chartType]="BarChartType"
+            [plugins]="ChartPlugins">
+        </canvas>
+    </po-container>
 </po-page-detail>
 
 <po-modal #detailsModal [p-title]="titleDetailsModal">
