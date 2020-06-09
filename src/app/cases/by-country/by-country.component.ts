@@ -33,20 +33,21 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   totalCountiesWithCases: number = 0
   totalCountiesWithDeaths: number = 0
   populationBrazil: number = 0
-  public lineChartData: ChartDataSets[] = []
-  public lineChartLabels: Label[] = new Array()
-  public lineChartLegend = true
-  public lineChartType = 'line'
-  public lineChartPlugins = []
 
-  public lineChartOptions: ChartOptions = {
+  /**Options charts */
+  public LineChartType = 'line'
+  public ChartLegend = true
+  public ChartPlugins = []
+  public ChartOptions: ChartOptions = {
     responsive: true
   }
 
-  public lineChartColors: Color[] = [
+  public LineChartDataAcumulatedCases: ChartDataSets[] = []
+  public LineChartDataAcumulatedLabels: Label[] = new Array()
+  public LineChartDataAcumulatedColors: Color[] = [
     {
-      borderColor: 'black',
-      backgroundColor: 'rgba(76,94,98,0.3)'
+      borderColor: 'rgb(0,0,255)',
+      backgroundColor: 'rgba(0,0,255,0.3)'
     }
   ]
 
@@ -109,10 +110,10 @@ export class ByCountryComponent implements OnInit, OnDestroy {
 
   getDataCasosEpidemiologicalCurve() {
     this._service.params = this._service.params.set('place_type', 'state')
-    this._service.params = this._service.params.set('is_last', 'False')
+    this._service.params = this._service.params.delete('is_last')
     this._service.params = this._service.params.set('page_size', '10000')
     this.request = this._service.getDataCasosFull().subscribe(response => {
-      this.getDataLineChartEpidemiologicalCurve(response.body['results'])
+      this.getDataLineChartAcumulatedCases(response.body['results'])
     }, err => {
     })
   }
@@ -228,17 +229,34 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     return population
   }
 
-  getDataLineChartEpidemiologicalCurve(data: CasoFull[]) {
-    let cases: number = 0
+  getDataLineChartAcumulatedCases(data: CasoFull[]) {
+    let new_cases: number = 0
     let casesData: number[] = new Array()
-    for (let i = data.length - 1; i > -1; i--) {
-      this.lineChartLabels.push(data[i]['last_available_date'])
-      cases = cases + data[i]['new_confirmed']
-      casesData.push(cases)
+
+    let cases = data.reduce(function (curValue, curIndex) {
+      let found: boolean = false
+      for (let item of curValue) {
+        if (item['date'] == curIndex['date']) {
+          item['new_confirmed'] += curIndex['new_confirmed']
+          found = true
+          break
+        }
+      }
+      if (!found) {
+        curValue.push(curIndex)
+      }
+      return curValue
+    }, [])
+
+    for (let i = cases.length - 1; i > -1; i--) {
+      this.LineChartDataAcumulatedLabels.push(cases[i]['date'])
+      new_cases = new_cases + cases[i]['new_confirmed']
+      casesData.push(new_cases)
     }
-    this.lineChartData = [{
+
+    this.LineChartDataAcumulatedCases = [{
       data: casesData,
-      label: 'Nº de casos por data'
+      label: 'Nº de casos por dia'
     }]
   }
 
