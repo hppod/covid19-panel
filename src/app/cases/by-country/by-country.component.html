@@ -1,6 +1,6 @@
 <app-error [condition]="statusResponse == 500 "></app-error>
 <po-page-detail *ngIf="statusResponse == 200" p-title="Casos no País">
-    <span class="date-updated">Última atualização dos dados em {{dateOfData | date: 'dd/MM/yyyy'}}</span>
+    <span class="date-updated">Última atualização dos dados feita em {{dateOfData | date: 'dd/MM/yyyy'}}</span>
     <div class="po-row">
         <po-widget class="po-lg-4 po-mt-2" p-height="200" p-primary-label="Ver detalhado" p-title="Casos"
             (p-primary-action)="openModal('cases')">
