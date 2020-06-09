@@ -73,6 +73,16 @@
             [chartType]="LineChartType" [plugins]="ChartPlugins">
         </canvas>
     </po-container>
+    <po-container class="po-lg-6 po-mt-2">
+        <po-container [p-no-border]="true" class="po-lg-8">
+            <span class="po-font-text-bold">Número de novos casos por dia no Brasil</span>
+        </po-container>
+        <canvas *ngIf="BarChartDataNewCasesDataset.length > 0" baseChart width="400" height="200"
+            [datasets]="BarChartDataNewCasesDataset" [labels]="BarChartDataNewCasesLabels" [options]="ChartOptions"
+            [colors]="BarChartDataNewCasesColors" [legend]="ChartLegend" [chartType]="BarChartType"
+            [plugins]="ChartPlugins">
+        </canvas>
+    </po-container>
 </po-page-detail>
 
 <po-modal #detailsModal [p-title]="titleDetailsModal">

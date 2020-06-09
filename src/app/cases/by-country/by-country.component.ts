@@ -36,6 +36,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
 
   /**Options charts */
   public LineChartType = 'line'
+  public BarChartType = 'bar'
   public ChartLegend = true
   public ChartPlugins = []
   public ChartOptions: ChartOptions = {
@@ -59,6 +60,15 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     {
       borderColor: 'rgb(255,0,0)',
       backgroundColor: 'rgba(255,0,0,0.3)'
+    }
+  ]
+
+  /**Bar chart new cases */
+  public BarChartDataNewCasesDataset: ChartDataSets[] = []
+  public BarChartDataNewCasesLabels: Label[] = new Array()
+  public BarChartDataNewCasesColors: Color[] = [
+    {
+      backgroundColor: 'rgb(0,0,255)',
     }
   ]
 
@@ -126,6 +136,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     this.request = this._service.getDataCasosFull().subscribe(response => {
       this.getDataLineChartAcumulatedCases(response.body['results'])
       this.getDataLineChartAcumulatedDeaths(response.body['results'])
+      this.getDataBarChartNewCases(response.body['results'])
     }, err => {
     })
   }
@@ -300,6 +311,30 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     this.LineChartDataAcumulatedDeathsDataset = [{
       data: deathsData,
       label: 'Nº de mortes por dia'
+    }]
+  }
+
+  getDataBarChartNewCases(data: CasoFull[]) {
+    let new_cases: number[] = new Array()
+    let dates: string[] = new Array()
+
+    let cases = data.reduce((obj, { date, new_confirmed }) => {
+      if (!obj[date]) {
+        obj[date] = new Array()
+      }
+      obj[date].push(new_confirmed)
+      return obj
+    }, {})
+
+    Object.keys(cases).forEach(function (item) {
+      dates.push(item)
+      new_cases.push(cases[item][0])
+    })
+
+    this.BarChartDataNewCasesLabels = dates.reverse()
+    this.BarChartDataNewCasesDataset = [{
+      data: new_cases.reverse(),
+      label: 'Nº de novos casos por dia'
     }]
   }
 
