@@ -57,10 +57,20 @@
         <po-container [p-no-border]="true" class="po-lg-8">
             <span class="po-font-text-bold">Número de casos acumulados por dia no Brasil</span>
         </po-container>
-        <canvas *ngIf="LineChartDataAcumulatedCases.length > 0" baseChart width="400" height="200"
-            [datasets]="LineChartDataAcumulatedCases" [labels]="LineChartDataAcumulatedLabels" [options]="ChartOptions"
-            [colors]="LineChartDataAcumulatedColors" [legend]="ChartLegend" [chartType]="LineChartType"
-            [plugins]="ChartPlugins">
+        <canvas *ngIf="LineChartDataAcumulatedCasesDataset.length > 0" baseChart width="400" height="200"
+            [datasets]="LineChartDataAcumulatedCasesDataset" [labels]="LineChartDataAcumulatedCasesLabels"
+            [options]="ChartOptions" [colors]="LineChartDataAcumulatedCasesColors" [legend]="ChartLegend"
+            [chartType]="LineChartType" [plugins]="ChartPlugins">
+        </canvas>
+    </po-container>
+    <po-container class="po-lg-6 po-mt-2">
+        <po-container [p-no-border]="true" class="po-lg-8">
+            <span class="po-font-text-bold">Número de mortes acumuladas por dia no Brasil</span>
+        </po-container>
+        <canvas *ngIf="LineChartDataAcumulatedDeathsDataset.length > 0" baseChart width="400" height="200"
+            [datasets]="LineChartDataAcumulatedDeathsDataset" [labels]="LineChartDataAcumulatedDeathsLabels"
+            [options]="ChartOptions" [colors]="LineChartDataAcumulatedDeathsColors" [legend]="ChartLegend"
+            [chartType]="LineChartType" [plugins]="ChartPlugins">
         </canvas>
     </po-container>
 </po-page-detail>

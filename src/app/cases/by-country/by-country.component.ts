@@ -42,12 +42,23 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     responsive: true
   }
 
-  public LineChartDataAcumulatedCases: ChartDataSets[] = []
-  public LineChartDataAcumulatedLabels: Label[] = new Array()
-  public LineChartDataAcumulatedColors: Color[] = [
+  /**Line chart acumulated cases */
+  public LineChartDataAcumulatedCasesDataset: ChartDataSets[] = []
+  public LineChartDataAcumulatedCasesLabels: Label[] = new Array()
+  public LineChartDataAcumulatedCasesColors: Color[] = [
     {
       borderColor: 'rgb(0,0,255)',
       backgroundColor: 'rgba(0,0,255,0.3)'
+    }
+  ]
+
+  /**Line chart acumulated deaths */
+  public LineChartDataAcumulatedDeathsDataset: ChartDataSets[] = []
+  public LineChartDataAcumulatedDeathsLabels: Label[] = new Array()
+  public LineChartDataAcumulatedDeathsColors: Color[] = [
+    {
+      borderColor: 'rgb(255,0,0)',
+      backgroundColor: 'rgba(255,0,0,0.3)'
     }
   ]
 
@@ -114,6 +125,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     this._service.params = this._service.params.set('page_size', '10000')
     this.request = this._service.getDataCasosFull().subscribe(response => {
       this.getDataLineChartAcumulatedCases(response.body['results'])
+      this.getDataLineChartAcumulatedDeaths(response.body['results'])
     }, err => {
     })
   }
@@ -249,14 +261,45 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     }, [])
 
     for (let i = cases.length - 1; i > -1; i--) {
-      this.LineChartDataAcumulatedLabels.push(cases[i]['date'])
+      this.LineChartDataAcumulatedCasesLabels.push(cases[i]['date'])
       new_cases = new_cases + cases[i]['new_confirmed']
       casesData.push(new_cases)
     }
 
-    this.LineChartDataAcumulatedCases = [{
+    this.LineChartDataAcumulatedCasesDataset = [{
       data: casesData,
       label: 'Nº de casos por dia'
+    }]
+  }
+
+  getDataLineChartAcumulatedDeaths(data: CasoFull[]) {
+    let new_deaths: number = 0
+    let deathsData: number[] = new Array()
+
+    let deaths = data.reduce(function (curValue, curIndex) {
+      let found: boolean = false
+      for (let item of curValue) {
+        if (item['date'] == curIndex['date']) {
+          item['new_deaths'] += curIndex['new_deaths']
+          found = true
+          break
+        }
+      }
+      if (!found) {
+        curValue.push(curIndex)
+      }
+      return curValue
+    }, [])
+
+    for (let i = deaths.length - 1; i > -1; i--) {
+      this.LineChartDataAcumulatedDeathsLabels.push(deaths[i]['date'])
+      new_deaths = new_deaths + deaths[i]['new_deaths']
+      deathsData.push(new_deaths)
+    }
+
+    this.LineChartDataAcumulatedDeathsDataset = [{
+      data: deathsData,
+      label: 'Nº de mortes por dia'
     }]
   }
 
