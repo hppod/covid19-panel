@@ -5,6 +5,7 @@ Log de alterações da aplicação.
 **VERSÃO 1.1**
  - **Brasil** - Correção do sistema de grid no modo responsivo.
   - **Como se prevenir** -  Centralização da animação "Lave suas mãos".
+  - **Brasil** -  Correção nos totalizadores de novos casos e novas mortes.
 
 
 **VERSÃO 1.0**

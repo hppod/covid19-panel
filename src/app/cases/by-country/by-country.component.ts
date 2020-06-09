@@ -7,6 +7,7 @@ import { Caso } from 'src/app/models/caso.model';
 import { Router } from '@angular/router';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
+import { formatDate } from "@angular/common"
 
 @Component({
   selector: 'app-by-country',
@@ -15,8 +16,7 @@ import { Color, Label } from 'ng2-charts';
 })
 export class ByCountryComponent implements OnInit, OnDestroy {
 
-
-
+  today: string = formatDate(new Date().toString(), 'yyyy-MM-dd', 'pt-BR')
   request: Subscription
   statusResponse: number
   Data: CasoFull[] = new Array()
@@ -156,7 +156,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   calculateNewCases(data: CasoFull[]): number {
     let newCases = 0
     for (let i = 0; i < data.length; i++) {
-      if (data[i]['is_last']) {
+      if (data[i]['last_available_date'] == this.today) {
         newCases = newCases + data[i]['new_confirmed']
       }
     }
@@ -166,7 +166,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   calculateNewDeaths(data: CasoFull[]): number {
     let newDeaths = 0
     for (let i = 0; i < data.length; i++) {
-      if (data[i]['is_last']) {
+      if (data[i]['last_available_date'] == this.today) {
         newDeaths = newDeaths + data[i]['new_deaths']
       }
     }
@@ -249,12 +249,12 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   openModal(type) {
     switch (type) {
       case 'cases':
-        this.titleDetailsModal = 'Novos casos - Detalhes'
+        this.titleDetailsModal = 'Casos - Detalhes'
         this.itemsDetails = this.itemsCasesDetails
         this.detailsModalElement.open()
         break;
       case 'deaths':
-        this.titleDetailsModal = 'Novas Mortes - Detalhes'
+        this.titleDetailsModal = 'Mortes - Detalhes'
         this.itemsDetails = this.itemsDeathsDetails
         this.detailsModalElement.open()
         break;
