@@ -8,8 +8,8 @@ Log de alterações da aplicação.
   - **Brasil** -  Correção nos totalizadores de novos casos e novas mortes.
   - **Brasil** -  Melhoria de desempenho no gráfico de casos acumulados.
   - **Brasil** -  Adição do gráfico de mortes acumuladas.
-  - **Brasil** -  Aição do gráfico de novos casos por dia no Brasil.
-  - **Brasil** -  Aição do gráfico de novas mortes por dia no Brasil.
+  - **Brasil** -  Adição do gráfico de novos casos por dia no Brasil.
+  - **Brasil** -  Adição do gráfico de novas mortes por dia no Brasil.
 
 **VERSÃO 1.0**
  - **Brasil** - Total de casos acumulados no País.
