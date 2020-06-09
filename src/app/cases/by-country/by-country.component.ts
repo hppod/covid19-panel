@@ -7,6 +7,7 @@ import { Caso } from 'src/app/models/caso.model';
 import { Router } from '@angular/router';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
+import { formatDate } from "@angular/common"
 
 @Component({
   selector: 'app-by-country',
@@ -15,8 +16,7 @@ import { Color, Label } from 'ng2-charts';
 })
 export class ByCountryComponent implements OnInit, OnDestroy {
 
-
-
+  today: string = formatDate(new Date().toString(), 'yyyy-MM-dd', 'pt-BR')
   request: Subscription
   statusResponse: number
   Data: CasoFull[] = new Array()
@@ -33,20 +33,51 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   totalCountiesWithCases: number = 0
   totalCountiesWithDeaths: number = 0
   populationBrazil: number = 0
-  public lineChartData: ChartDataSets[] = []
-  public lineChartLabels: Label[] = new Array()
-  public lineChartLegend = true
-  public lineChartType = 'line'
-  public lineChartPlugins = []
 
-  public lineChartOptions: ChartOptions = {
+  /**Options charts */
+  public LineChartType = 'line'
+  public BarChartType = 'bar'
+  public ChartLegend = true
+  public ChartPlugins = []
+  public ChartOptions: ChartOptions = {
     responsive: true
   }
 
-  public lineChartColors: Color[] = [
+  /**Line chart acumulated cases */
+  public LineChartDataAcumulatedCasesDataset: ChartDataSets[] = []
+  public LineChartDataAcumulatedCasesLabels: Label[] = new Array()
+  public LineChartDataAcumulatedCasesColors: Color[] = [
     {
-      borderColor: 'black',
-      backgroundColor: 'rgba(76,94,98,0.3)'
+      borderColor: 'rgb(0,0,255)',
+      backgroundColor: 'rgba(0,0,255,0.3)'
+    }
+  ]
+
+  /**Line chart acumulated deaths */
+  public LineChartDataAcumulatedDeathsDataset: ChartDataSets[] = []
+  public LineChartDataAcumulatedDeathsLabels: Label[] = new Array()
+  public LineChartDataAcumulatedDeathsColors: Color[] = [
+    {
+      borderColor: 'rgb(255,0,0)',
+      backgroundColor: 'rgba(255,0,0,0.3)'
+    }
+  ]
+
+  /**Bar chart new cases */
+  public BarChartDataNewCasesDataset: ChartDataSets[] = []
+  public BarChartDataNewCasesLabels: Label[] = new Array()
+  public BarChartDataNewCasesColors: Color[] = [
+    {
+      backgroundColor: 'rgb(0,0,255)',
+    }
+  ]
+
+  /**Bar chart new deaths */
+  public BarChartDataNewDeathsDataset: ChartDataSets[] = []
+  public BarChartDataNewDeathsLabels: Label[] = new Array()
+  public BarChartDataNewDeathsColors: Color[] = [
+    {
+      backgroundColor: 'rgb(255,0,0)',
     }
   ]
 
@@ -109,10 +140,13 @@ export class ByCountryComponent implements OnInit, OnDestroy {
 
   getDataCasosEpidemiologicalCurve() {
     this._service.params = this._service.params.set('place_type', 'state')
-    this._service.params = this._service.params.set('is_last', 'False')
+    this._service.params = this._service.params.delete('is_last')
     this._service.params = this._service.params.set('page_size', '10000')
     this.request = this._service.getDataCasosFull().subscribe(response => {
-      this.getDataLineChartEpidemiologicalCurve(response.body['results'])
+      this.getDataLineChartAcumulatedCases(response.body['results'])
+      this.getDataLineChartAcumulatedDeaths(response.body['results'])
+      this.getDataBarChartNewCases(response.body['results'])
+      this.getDataBarChartNewDeaths(response.body['results'])
     }, err => {
     })
   }
@@ -154,23 +188,43 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   }
 
   calculateNewCases(data: CasoFull[]): number {
-    let newCases = 0
-    for (let i = 0; i < data.length; i++) {
-      if (data[i]['is_last']) {
-        newCases = newCases + data[i]['new_confirmed']
+    let new_cases: any = new Array()
+    let sum: number = 0
+
+    let cases = data.reduce((obj, { date, new_confirmed }) => {
+      if (!obj[date]) {
+        obj[date] = new Array()
       }
-    }
-    return newCases
+      sum = sum + new_confirmed
+      obj[date].push(sum)
+      return obj
+    }, {})
+
+    Object.keys(cases).forEach(function (item) {
+      new_cases.push(cases[item])
+    })
+
+    return new_cases[0][new_cases[0].length - 1]
   }
 
   calculateNewDeaths(data: CasoFull[]): number {
-    let newDeaths = 0
-    for (let i = 0; i < data.length; i++) {
-      if (data[i]['is_last']) {
-        newDeaths = newDeaths + data[i]['new_deaths']
+    let new_deaths: any = new Array()
+    let sum: number = 0
+
+    let cases = data.reduce((obj, { date, new_deaths }) => {
+      if (!obj[date]) {
+        obj[date] = new Array()
       }
-    }
-    return newDeaths
+      sum = sum + new_deaths
+      obj[date].push(sum)
+      return obj
+    }, {})
+
+    Object.keys(cases).forEach(function (item) {
+      new_deaths.push(cases[item])
+    })
+
+    return new_deaths[0][new_deaths[0].length - 1]
   }
 
   calculateDeathsOnCounties(data: Caso[]): number {
@@ -232,29 +286,125 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     return population
   }
 
-  getDataLineChartEpidemiologicalCurve(data: CasoFull[]) {
-    let cases: number = 0
+  getDataLineChartAcumulatedCases(data: CasoFull[]) {
+    let new_cases: number = 0
     let casesData: number[] = new Array()
-    for (let i = data.length - 1; i > -1; i--) {
-      this.lineChartLabels.push(data[i]['last_available_date'])
-      cases = cases + data[i]['new_confirmed']
-      casesData.push(cases)
+
+    let cases = data.reduce(function (curValue, curIndex) {
+      let found: boolean = false
+      for (let item of curValue) {
+        if (item['date'] == curIndex['date']) {
+          item['new_confirmed'] += curIndex['new_confirmed']
+          found = true
+          break
+        }
+      }
+      if (!found) {
+        curValue.push(curIndex)
+      }
+      return curValue
+    }, [])
+
+    for (let i = cases.length - 1; i > -1; i--) {
+      this.LineChartDataAcumulatedCasesLabels.push(cases[i]['date'])
+      new_cases = new_cases + cases[i]['new_confirmed']
+      casesData.push(new_cases)
     }
-    this.lineChartData = [{
+
+    this.LineChartDataAcumulatedCasesDataset = [{
       data: casesData,
-      label: 'Nº de casos por data'
+      label: 'Nº de casos por dia'
+    }]
+  }
+
+  getDataLineChartAcumulatedDeaths(data: CasoFull[]) {
+    let new_deaths: number = 0
+    let deathsData: number[] = new Array()
+
+    let deaths = data.reduce(function (curValue, curIndex) {
+      let found: boolean = false
+      for (let item of curValue) {
+        if (item['date'] == curIndex['date']) {
+          item['new_deaths'] += curIndex['new_deaths']
+          found = true
+          break
+        }
+      }
+      if (!found) {
+        curValue.push(curIndex)
+      }
+      return curValue
+    }, [])
+
+    for (let i = deaths.length - 1; i > -1; i--) {
+      this.LineChartDataAcumulatedDeathsLabels.push(deaths[i]['date'])
+      new_deaths = new_deaths + deaths[i]['new_deaths']
+      deathsData.push(new_deaths)
+    }
+
+    this.LineChartDataAcumulatedDeathsDataset = [{
+      data: deathsData,
+      label: 'Nº de mortes por dia'
+    }]
+  }
+
+  getDataBarChartNewCases(data: CasoFull[]) {
+    let new_cases: number[] = new Array()
+    let dates: string[] = new Array()
+
+    let cases = data.reduce((obj, { date, new_confirmed }) => {
+      if (!obj[date]) {
+        obj[date] = new Array()
+      }
+      obj[date].push(new_confirmed)
+      return obj
+    }, {})
+
+    Object.keys(cases).forEach(function (item) {
+      dates.push(item)
+      new_cases.push(cases[item][0])
+    })
+
+    this.BarChartDataNewCasesLabels = dates.reverse()
+    this.BarChartDataNewCasesDataset = [{
+      data: new_cases.reverse(),
+      label: 'Nº de novos casos por dia'
+    }]
+  }
+
+  getDataBarChartNewDeaths(data: CasoFull[]) {
+    let new_deaths: number[] = new Array()
+    let dates: string[] = new Array()
+
+    let deaths = data.reduce((obj, { date, new_deaths }) => {
+      if (!obj[date]) {
+        obj[date] = new Array()
+      }
+      obj[date].push(new_deaths)
+      return obj
+    }, {})
+
+    Object.keys(deaths).forEach(function (item) {
+      dates.push(item)
+      new_deaths.push(deaths[item][0])
+    })
+
+    this.BarChartDataNewDeathsLabels = dates.reverse()
+    this.BarChartDataNewDeathsDataset = [{
+      data: new_deaths.reverse(),
+      label: 'Nº de novas mortes por dia'
     }]
   }
 
   openModal(type) {
     switch (type) {
       case 'cases':
-        this.titleDetailsModal = 'Novos casos - Detalhes'
+        this.titleDetailsModal = 'Casos - Detalhes'
         this.itemsDetails = this.itemsCasesDetails
         this.detailsModalElement.open()
         break;
       case 'deaths':
-        this.titleDetailsModal = 'Novas Mortes - Detalhes'
+        this.titleDetailsModal = 'Mortes - Detalhes'
         this.itemsDetails = this.itemsDeathsDetails
         this.detailsModalElement.open()
         break;

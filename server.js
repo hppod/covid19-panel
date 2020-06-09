@@ -22,6 +22,9 @@ app.use(function (req, res, next) {
 })
 
 app.get('*', (req, res, next) => {
+    console.log('sendFile')
+    console.log(`dirname: ${__dirname}`)
+    console.log(`dirname_full: ${__dirname + '/dist/covid19-panel/index.html'}`)
     res.sendFile(path.join(__dirname + '/dist/covid19-panel/index.html'))
 })
 
