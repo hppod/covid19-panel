@@ -1,7 +1,7 @@
 import { CasoFull } from "./../models/caso_full.model"
 
 /**
- * Função que recebe um dataset de dados e os totaliza, agrupando-os por datas.
+ * Função que recebe um dataset de dados e os acumula, agrupando-os por datas.
  * @param Dataset Recebe o dataset dos dados a serem trabalhados.
  * @param PropertyName Recebe o nome da propriedade que deve ser levada em consideração para realizar o totalizador dos dados.
  */
@@ -26,4 +26,32 @@ export function ExtractAccumulatedData(Dataset: CasoFull[], PropertyName: String
     }, [])
 
     return data
+}
+
+/**
+ * Função que recebe um dataset de dados e os totaliza, agrupando-os por datas.
+ * @param Dataset Recebe o dataset dos dados a serem trabalhados.
+ * @param PropertyName Recebe o nome da propriedade que deve ser levada em consideração para realizar o totalizador dos dados.
+ */
+export function ExtractNewData(Dataset: CasoFull[], PropertyName: String) {
+
+    switch (PropertyName) {
+        case PropertyName = 'new_confirmed':
+            return Dataset.reduce((obj, { date, new_confirmed }) => {
+                if (!obj[date]) {
+                    obj[date] = new Array()
+                }
+                obj[date].push(new_confirmed)
+                return obj
+            }, {})
+        case PropertyName = 'new_deaths':
+            return Dataset.reduce((obj, { date, new_deaths }) => {
+                if (!obj[date]) {
+                    obj[date] = new Array()
+                }
+                obj[date].push(new_deaths)
+                return obj
+            }, {})
+    }
+
 }

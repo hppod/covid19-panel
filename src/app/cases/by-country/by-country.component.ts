@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { formatDate } from "@angular/common"
-import { ExtractAccumulatedData } from 'src/app/functions/utils';
+import { ExtractAccumulatedData, ExtractNewData } from 'src/app/functions/utils';
 
 @Component({
   selector: 'app-by-country',
@@ -321,49 +321,35 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   }
 
   getDataBarChartNewCases(data: CasoFull[]) {
-    let new_cases: number[] = new Array()
-    let dates: string[] = new Array()
-
-    let cases = data.reduce((obj, { date, new_confirmed }) => {
-      if (!obj[date]) {
-        obj[date] = new Array()
-      }
-      obj[date].push(new_confirmed)
-      return obj
-    }, {})
+    let newCasesPerDay: number[] = new Array()
+    let datesNewCases: string[] = new Array()
+    let cases = ExtractNewData(data, 'new_confirmed')
 
     Object.keys(cases).forEach(function (item) {
-      dates.push(item)
-      new_cases.push(cases[item][0])
+      datesNewCases.push(item)
+      newCasesPerDay.push(cases[item][0])
     })
 
-    this.BarChartDataNewCasesLabels = dates.reverse()
+    this.BarChartDataNewCasesLabels = datesNewCases.reverse()
     this.BarChartDataNewCasesDataset = [{
-      data: new_cases.reverse(),
+      data: newCasesPerDay.reverse(),
       label: 'Nº de novos casos por dia'
     }]
   }
 
   getDataBarChartNewDeaths(data: CasoFull[]) {
-    let new_deaths: number[] = new Array()
-    let dates: string[] = new Array()
-
-    let deaths = data.reduce((obj, { date, new_deaths }) => {
-      if (!obj[date]) {
-        obj[date] = new Array()
-      }
-      obj[date].push(new_deaths)
-      return obj
-    }, {})
+    let newDeathsPerDay: number[] = new Array()
+    let datesNewDeaths: string[] = new Array()
+    let deaths = ExtractNewData(data, 'new_deaths')
 
     Object.keys(deaths).forEach(function (item) {
-      dates.push(item)
-      new_deaths.push(deaths[item][0])
+      datesNewDeaths.push(item)
+      newDeathsPerDay.push(deaths[item][0])
     })
 
-    this.BarChartDataNewDeathsLabels = dates.reverse()
+    this.BarChartDataNewDeathsLabels = datesNewDeaths.reverse()
     this.BarChartDataNewDeathsDataset = [{
-      data: new_deaths.reverse(),
+      data: newDeathsPerDay.reverse(),
       label: 'Nº de novas mortes por dia'
     }]
   }
