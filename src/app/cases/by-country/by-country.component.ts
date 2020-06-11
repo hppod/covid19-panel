@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { formatDate } from "@angular/common"
+import { ExtractAccumulatedData } from 'src/app/functions/utils';
 
 @Component({
   selector: 'app-by-country',
@@ -16,7 +17,6 @@ import { formatDate } from "@angular/common"
 })
 export class ByCountryComponent implements OnInit, OnDestroy {
 
-  today: string = formatDate(new Date().toString(), 'yyyy-MM-dd', 'pt-BR')
   request: Subscription
   statusResponse: number
   Data: CasoFull[] = new Array()
@@ -287,63 +287,35 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   }
 
   getDataLineChartAcumulatedCases(data: CasoFull[]) {
-    let new_cases: number = 0
-    let casesData: number[] = new Array()
-
-    let cases = data.reduce(function (curValue, curIndex) {
-      let found: boolean = false
-      for (let item of curValue) {
-        if (item['date'] == curIndex['date']) {
-          item['new_confirmed'] += curIndex['new_confirmed']
-          found = true
-          break
-        }
-      }
-      if (!found) {
-        curValue.push(curIndex)
-      }
-      return curValue
-    }, [])
+    let DatasetChart: number[] = new Array()
+    let accumulatedCasesSum: number = 0
+    let cases: CasoFull[] = ExtractAccumulatedData(data, 'new_confirmed')
 
     for (let i = cases.length - 1; i > -1; i--) {
       this.LineChartDataAcumulatedCasesLabels.push(cases[i]['date'])
-      new_cases = new_cases + cases[i]['new_confirmed']
-      casesData.push(new_cases)
+      accumulatedCasesSum = accumulatedCasesSum + cases[i]['new_confirmed']
+      DatasetChart.push(accumulatedCasesSum)
     }
 
     this.LineChartDataAcumulatedCasesDataset = [{
-      data: casesData,
+      data: DatasetChart,
       label: 'Nº de casos por dia'
     }]
   }
 
   getDataLineChartAcumulatedDeaths(data: CasoFull[]) {
-    let new_deaths: number = 0
-    let deathsData: number[] = new Array()
-
-    let deaths = data.reduce(function (curValue, curIndex) {
-      let found: boolean = false
-      for (let item of curValue) {
-        if (item['date'] == curIndex['date']) {
-          item['new_deaths'] += curIndex['new_deaths']
-          found = true
-          break
-        }
-      }
-      if (!found) {
-        curValue.push(curIndex)
-      }
-      return curValue
-    }, [])
+    let DatasetChart: number[] = new Array()
+    let accumulatedDeathsSum: number = 0
+    let deaths: CasoFull[] = ExtractAccumulatedData(data, 'new_deaths')
 
     for (let i = deaths.length - 1; i > -1; i--) {
       this.LineChartDataAcumulatedDeathsLabels.push(deaths[i]['date'])
-      new_deaths = new_deaths + deaths[i]['new_deaths']
-      deathsData.push(new_deaths)
+      accumulatedDeathsSum = accumulatedDeathsSum + deaths[i]['new_deaths']
+      DatasetChart.push(accumulatedDeathsSum)
     }
 
     this.LineChartDataAcumulatedDeathsDataset = [{
-      data: deathsData,
+      data: DatasetChart,
       label: 'Nº de mortes por dia'
     }]
   }
