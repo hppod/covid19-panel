@@ -33,13 +33,15 @@ export class PreventionComponent implements OnInit {
   }
 
   styles: Partial<CSSStyleDeclaration> = {
-    marginLeft: '60px',
-    marginTop: '0px'
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   }
 
   stylesDoctors: Partial<CSSStyleDeclaration> = {
-    marginLeft: '185px',
-    marginTop: '0px'
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   }
 
   constructor() { }
