@@ -2,7 +2,7 @@
 <po-page-detail *ngIf="statusResponse == 200" p-title="Casos no País">
     <span class="date-updated">Última atualização dos dados feita em {{dateOfData | date: 'dd/MM/yyyy'}}</span>
     <div class="po-row">
-        <po-widget class="po-lg-4 po-mt-2" p-height="200" p-primary-label="Ver detalhado" p-title="Casos"
+        <po-widget class="po-lg-3 po-mt-2" p-primary-label="Ver detalhado" p-title="Casos"
             (p-primary-action)="openModal('cases')">
             <div *ngIf="numberOfCases == 0 && numberOfNewCases == 0" class="po-font-text-smaller po-text-center">
                 Carregando...
@@ -10,7 +10,7 @@
             <div *ngIf="numberOfCases > 0" class="po-font-subtitle po-text-center">{{numberOfCases | number}}</div>
             <div *ngIf="numberOfNewCases > 0" class="po-text-center">{{numberOfNewCases | number}} novos</div>
         </po-widget>
-        <po-widget class="po-lg-4 po-mt-2" p-height="200" p-primary-label="Ver detalhado" p-title="Mortes"
+        <po-widget class="po-lg-3 po-mt-2" p-primary-label="Ver detalhado" p-title="Mortes"
             (p-primary-action)="openModal('deaths')">
             <div *ngIf="numberOfDeaths == 0 && numberOfNewDeaths == 0" class="po-font-text-smaller po-text-center">
                 Carregando...
@@ -18,45 +18,41 @@
             <div *ngIf="numberOfDeaths > 0" class="po-font-subtitle po-text-center">{{numberOfDeaths | number }}</div>
             <div *ngIf="numberOfNewDeaths > 0" class="po-text-center">{{numberOfNewDeaths | number}} novas</div>
         </po-widget>
-        <po-container p-height="200" class="po-lg-4 po-md-12 po-sm-12 po-mt-2">
-            <div class="po-row">
-                <po-widget class="po-lg-4 po-mt-2" p-title="Total de municípios">
-                    <div *ngIf="totalCounties == 0" class="po-font-text-smaller po-text-center">Carregando...
-                    </div>
-                    <div *ngIf="totalCounties > 0" class="po-font-subtitle po-text-center">{{totalCounties | number}}
-                    </div>
-                    <div *ngIf="totalCounties > 0" class="po-text-center">municípios</div>
-                </po-widget>
-                <po-widget class="po-lg-4 po-mt-2" p-title="Municípios com casos">
-                    <div *ngIf="totalCountiesWithCases == 0" class="po-font-text-smaller po-text-center">Carregando...
-                    </div>
-                    <div *ngIf="totalCountiesWithCases > 0" class="po-font-subtitle po-text-center">
-                        {{totalCountiesWithCases | number}}</div>
-                    <div *ngIf="totalCountiesWithCases > 0" class="po-text-center">
-                        {{(totalCountiesWithCases / totalCounties) | percent }} tem casos</div>
-                </po-widget>
-                <po-widget class="po-lg-4 po-mt-2" p-title="Municípios com mortes">
-                    <div *ngIf="totalCountiesWithDeaths == 0" class="po-font-text-smaller po-text-center">Carregando...
-                    </div>
-                    <div *ngIf="totalCountiesWithDeaths > 0" class="po-font-subtitle po-text-center">
-                        {{totalCountiesWithDeaths | number}}</div>
-                    <div *ngIf="totalCountiesWithDeaths > 0" class="po-text-center">
-                        {{(totalCountiesWithDeaths / totalCounties) | percent }} tem mortes
-                    </div>
-                </po-widget>
+        <po-widget class="po-lg-2 po-mt-2" p-height="163" p-title="Total de municípios">
+            <div *ngIf="totalCounties == 0" class="po-font-text-smaller po-text-center">Carregando...
             </div>
-        </po-container>
+            <div *ngIf="totalCounties > 0" class="po-font-subtitle po-text-center">{{totalCounties | number}}
+            </div>
+            <div *ngIf="totalCounties > 0" class="po-text-center">municípios</div>
+        </po-widget>
+        <po-widget class="po-lg-2 po-mt-2" p-height="163" p-title="Municípios com casos">
+            <div *ngIf="totalCountiesWithCases == 0" class="po-font-text-smaller po-text-center">Carregando...
+            </div>
+            <div *ngIf="totalCountiesWithCases > 0" class="po-font-subtitle po-text-center">
+                {{totalCountiesWithCases | number}}</div>
+            <div *ngIf="totalCountiesWithCases > 0" class="po-text-center">
+                {{(totalCountiesWithCases / totalCounties) | percent }} tem casos</div>
+        </po-widget>
+        <po-widget class="po-lg-2 po-mt-2" p-height="163" p-title="Municípios com mortes">
+            <div *ngIf="totalCountiesWithDeaths == 0" class="po-font-text-smaller po-text-center">Carregando...
+            </div>
+            <div *ngIf="totalCountiesWithDeaths > 0" class="po-font-subtitle po-text-center">
+                {{totalCountiesWithDeaths | number}}</div>
+            <div *ngIf="totalCountiesWithDeaths > 0" class="po-text-center">
+                {{(totalCountiesWithDeaths / totalCounties) | percent }} tem mortes
+            </div>
+        </po-widget>
     </div>
-    <div class="po-row">
-        <!-- <po-chart *ngIf="newCasesPerStateData.length > 0" class="po-lg-4 po-mt-2" [p-height]="480"
+    <!-- <div class="po-row"> -->
+    <!-- <po-chart *ngIf="newCasesPerStateData.length > 0" class="po-lg-4 po-mt-2" [p-height]="480"
             p-title="Novos casos por Estado" [p-series]="newCasesPerStateData" [p-type]="newCasesPerStateType">
         </po-chart> -->
-
-    </div>
+    <!-- </div> -->
     <po-container class="po-lg-6 po-mt-2">
         <po-container [p-no-border]="true" class="po-lg-8">
             <span class="po-font-text-bold">Número de casos acumulados por dia no Brasil</span>
         </po-container>
+        <app-loading *ngIf="BarChartDataNewDeathsDataset.length == 0"></app-loading>
         <canvas *ngIf="LineChartDataAcumulatedCasesDataset.length > 0" baseChart width="400" height="200"
             [datasets]="LineChartDataAcumulatedCasesDataset" [labels]="LineChartDataAcumulatedCasesLabels"
             [options]="ChartOptions" [colors]="LineChartDataAcumulatedCasesColors" [legend]="ChartLegend"
@@ -67,6 +63,7 @@
         <po-container [p-no-border]="true" class="po-lg-8">
             <span class="po-font-text-bold">Número de mortes acumuladas por dia no Brasil</span>
         </po-container>
+        <app-loading *ngIf="BarChartDataNewDeathsDataset.length == 0"></app-loading>
         <canvas *ngIf="LineChartDataAcumulatedDeathsDataset.length > 0" baseChart width="400" height="200"
             [datasets]="LineChartDataAcumulatedDeathsDataset" [labels]="LineChartDataAcumulatedDeathsLabels"
             [options]="ChartOptions" [colors]="LineChartDataAcumulatedDeathsColors" [legend]="ChartLegend"
@@ -77,6 +74,7 @@
         <po-container [p-no-border]="true" class="po-lg-8">
             <span class="po-font-text-bold">Número de novos casos por dia no Brasil</span>
         </po-container>
+        <app-loading *ngIf="BarChartDataNewDeathsDataset.length == 0"></app-loading>
         <canvas *ngIf="BarChartDataNewCasesDataset.length > 0" baseChart width="400" height="200"
             [datasets]="BarChartDataNewCasesDataset" [labels]="BarChartDataNewCasesLabels" [options]="ChartOptions"
             [colors]="BarChartDataNewCasesColors" [legend]="ChartLegend" [chartType]="BarChartType"
@@ -87,6 +85,7 @@
         <po-container [p-no-border]="true" class="po-lg-8">
             <span class="po-font-text-bold">Número de novas mortes por dia no Brasil</span>
         </po-container>
+        <app-loading *ngIf="BarChartDataNewDeathsDataset.length == 0"></app-loading>
         <canvas *ngIf="BarChartDataNewDeathsDataset.length > 0" baseChart width="400" height="200"
             [datasets]="BarChartDataNewDeathsDataset" [labels]="BarChartDataNewDeathsLabels" [options]="ChartOptions"
             [colors]="BarChartDataNewDeathsColors" [legend]="ChartLegend" [chartType]="BarChartType"

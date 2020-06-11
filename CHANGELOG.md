@@ -2,14 +2,20 @@
 
 Log de alterações da aplicação.
 
+**VERSÃO 1.2**
+  - **Brasil** - Correção no sistema de carregamento dos gráficos.
+  - **Brasil** - Melhoria de desempenho no carregamento dos dados nos gráficos.
+  - **Brasil** - Melhoria de desempenho no gráfico de casos acumulados.
+  - **Como se prevenir** - Correção do sistema de grid no modo responsivo.
+
 **VERSÃO 1.1**
   - **Brasil** - Correção do sistema de grid no modo responsivo.
-  - **Como se prevenir** -  Centralização da animação "Lave suas mãos".
   - **Brasil** -  Correção nos totalizadores de novos casos e novas mortes.
   - **Brasil** -  Melhoria de desempenho no gráfico de casos acumulados.
   - **Brasil** -  Adição do gráfico de mortes acumuladas.
   - **Brasil** -  Adição do gráfico de novos casos por dia no Brasil.
   - **Brasil** -  Adição do gráfico de novas mortes por dia no Brasil.
+  - **Como se prevenir** -  Centralização da animação "Lave suas mãos".
 
 **VERSÃO 1.0**
  - **Brasil** - Total de casos acumulados no País.

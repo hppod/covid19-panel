@@ -7,7 +7,7 @@ import { Caso } from 'src/app/models/caso.model';
 import { Router } from '@angular/router';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
-import { formatDate } from "@angular/common"
+import { ExtractAccumulatedData, ExtractNewData, CalculateNewData } from 'src/app/functions/utils';
 
 @Component({
   selector: 'app-by-country',
@@ -16,7 +16,6 @@ import { formatDate } from "@angular/common"
 })
 export class ByCountryComponent implements OnInit, OnDestroy {
 
-  today: string = formatDate(new Date().toString(), 'yyyy-MM-dd', 'pt-BR')
   request: Subscription
   statusResponse: number
   Data: CasoFull[] = new Array()
@@ -32,7 +31,6 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   totalCounties: number = 0
   totalCountiesWithCases: number = 0
   totalCountiesWithDeaths: number = 0
-  populationBrazil: number = 0
 
   /**Options charts */
   public LineChartType = 'line'
@@ -156,7 +154,6 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     this._service.params = this._service.params.append('page_size', '10000')
     this.request = this._service.getDataCasos().subscribe(response => {
       this.totalCountiesWithDeaths = this.calculateDeathsOnCounties(response.body['results'])
-      this.populationBrazil = this.calculatePopulation(response.body['results'])
       this.getDataCasosEpidemiologicalCurve()
     }, err => {
     })
@@ -171,6 +168,10 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     })
   }
 
+  /**
+    * Totaliza o número de casos desde o início da pandemia
+    * @param data Recebe os dados vindos da requisição feita a API
+    */
   calculateCases(data: CasoFull[]): number {
     let cases = 0
     for (let i = 0; i < data.length; i++) {
@@ -179,6 +180,10 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     return cases
   }
 
+  /**
+   * Totaliza o número de mortes desde o início da pandemia
+   * @param data Recebe os dados vindos da requisição feita a API
+   */
   calculateDeaths(data: CasoFull[]): number {
     let deaths = 0
     for (let i = 0; i < data.length; i++) {
@@ -187,44 +192,34 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     return deaths
   }
 
+  /**
+   * Extrai os dados de novos casos em relação ao dia anterior
+   * @param data Recebe os dados vindos da requisição feita a API
+   */
   calculateNewCases(data: CasoFull[]): number {
-    let new_cases: any = new Array()
-    let sum: number = 0
-
-    let cases = data.reduce((obj, { date, new_confirmed }) => {
-      if (!obj[date]) {
-        obj[date] = new Array()
-      }
-      sum = sum + new_confirmed
-      obj[date].push(sum)
-      return obj
-    }, {})
+    let sumNewCases: any = new Array()
+    let cases = CalculateNewData(data, 'new_confirmed')
 
     Object.keys(cases).forEach(function (item) {
-      new_cases.push(cases[item])
+      sumNewCases.push(cases[item])
     })
 
-    return new_cases[0][new_cases[0].length - 1]
+    return sumNewCases[0][sumNewCases[0].length - 1]
   }
 
+  /**
+     * Extrai os dados de novas mortes em relação ao dia anterior
+     * @param data Recebe os dados vindos da requisição feita a API
+     */
   calculateNewDeaths(data: CasoFull[]): number {
-    let new_deaths: any = new Array()
-    let sum: number = 0
-
-    let cases = data.reduce((obj, { date, new_deaths }) => {
-      if (!obj[date]) {
-        obj[date] = new Array()
-      }
-      sum = sum + new_deaths
-      obj[date].push(sum)
-      return obj
-    }, {})
+    let sumNewDeaths: any = new Array()
+    let cases = CalculateNewData(data, 'new_deaths')
 
     Object.keys(cases).forEach(function (item) {
-      new_deaths.push(cases[item])
+      sumNewDeaths.push(cases[item])
     })
 
-    return new_deaths[0][new_deaths[0].length - 1]
+    return sumNewDeaths[0][sumNewDeaths[0].length - 1]
   }
 
   calculateDeathsOnCounties(data: Caso[]): number {
@@ -278,125 +273,95 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     return deathsDetails
   }
 
-  calculatePopulation(data: Caso[]): number {
-    let population = 0
-    for (let i = 0; i < data.length; i++) {
-      population = population + data[i]['estimated_population_2019']
-    }
-    return population
-  }
-
+  /**
+   * Extrai os dados de casos acumulados por dia e atribui-os aos sets do gráfico de linhas
+   * @param data Recebe os dados vindos da requisição feita a API
+   */
   getDataLineChartAcumulatedCases(data: CasoFull[]) {
-    let new_cases: number = 0
-    let casesData: number[] = new Array()
-
-    let cases = data.reduce(function (curValue, curIndex) {
-      let found: boolean = false
-      for (let item of curValue) {
-        if (item['date'] == curIndex['date']) {
-          item['new_confirmed'] += curIndex['new_confirmed']
-          found = true
-          break
-        }
-      }
-      if (!found) {
-        curValue.push(curIndex)
-      }
-      return curValue
-    }, [])
+    let DatasetChart: number[] = new Array()
+    let accumulatedCasesSum: number = 0
+    let cases: CasoFull[] = ExtractAccumulatedData(data, 'new_confirmed')
 
     for (let i = cases.length - 1; i > -1; i--) {
       this.LineChartDataAcumulatedCasesLabels.push(cases[i]['date'])
-      new_cases = new_cases + cases[i]['new_confirmed']
-      casesData.push(new_cases)
+      accumulatedCasesSum = accumulatedCasesSum + cases[i]['new_confirmed']
+      DatasetChart.push(accumulatedCasesSum)
     }
 
     this.LineChartDataAcumulatedCasesDataset = [{
-      data: casesData,
+      data: DatasetChart,
       label: 'Nº de casos por dia'
     }]
   }
 
+  /**
+   * Extrai os dados de mortes acumuladas por dia e atribui-os aos sets do gráfico de linhas
+   * @param data Recebe os dados vindos da requisição feita a API
+   */
   getDataLineChartAcumulatedDeaths(data: CasoFull[]) {
-    let new_deaths: number = 0
-    let deathsData: number[] = new Array()
-
-    let deaths = data.reduce(function (curValue, curIndex) {
-      let found: boolean = false
-      for (let item of curValue) {
-        if (item['date'] == curIndex['date']) {
-          item['new_deaths'] += curIndex['new_deaths']
-          found = true
-          break
-        }
-      }
-      if (!found) {
-        curValue.push(curIndex)
-      }
-      return curValue
-    }, [])
+    let DatasetChart: number[] = new Array()
+    let accumulatedDeathsSum: number = 0
+    let deaths: CasoFull[] = ExtractAccumulatedData(data, 'new_deaths')
 
     for (let i = deaths.length - 1; i > -1; i--) {
       this.LineChartDataAcumulatedDeathsLabels.push(deaths[i]['date'])
-      new_deaths = new_deaths + deaths[i]['new_deaths']
-      deathsData.push(new_deaths)
+      accumulatedDeathsSum = accumulatedDeathsSum + deaths[i]['new_deaths']
+      DatasetChart.push(accumulatedDeathsSum)
     }
 
     this.LineChartDataAcumulatedDeathsDataset = [{
-      data: deathsData,
+      data: DatasetChart,
       label: 'Nº de mortes por dia'
     }]
   }
 
+  /**
+   * Extrai os dados de novos casos por dia e atribui-os aos sets do gráfico de barras
+   * @param data Recebe os dados vindos da requisição feita a API
+   */
   getDataBarChartNewCases(data: CasoFull[]) {
-    let new_cases: number[] = new Array()
-    let dates: string[] = new Array()
-
-    let cases = data.reduce((obj, { date, new_confirmed }) => {
-      if (!obj[date]) {
-        obj[date] = new Array()
-      }
-      obj[date].push(new_confirmed)
-      return obj
-    }, {})
+    let newCasesPerDay: number[] = new Array()
+    let datesNewCases: string[] = new Array()
+    let cases = ExtractNewData(data, 'new_confirmed')
 
     Object.keys(cases).forEach(function (item) {
-      dates.push(item)
-      new_cases.push(cases[item][0])
+      datesNewCases.push(item)
+      newCasesPerDay.push(cases[item][0])
     })
 
-    this.BarChartDataNewCasesLabels = dates.reverse()
+    this.BarChartDataNewCasesLabels = datesNewCases.reverse()
     this.BarChartDataNewCasesDataset = [{
-      data: new_cases.reverse(),
+      data: newCasesPerDay.reverse(),
       label: 'Nº de novos casos por dia'
     }]
   }
 
+  /**
+   * Extrai os dados de novas mortes por dia e atribui-os aos sets do gráfico de barras
+   * @param data Recebe os dados vindos da requisição feita a API
+   */
   getDataBarChartNewDeaths(data: CasoFull[]) {
-    let new_deaths: number[] = new Array()
-    let dates: string[] = new Array()
-
-    let deaths = data.reduce((obj, { date, new_deaths }) => {
-      if (!obj[date]) {
-        obj[date] = new Array()
-      }
-      obj[date].push(new_deaths)
-      return obj
-    }, {})
+    let newDeathsPerDay: number[] = new Array()
+    let datesNewDeaths: string[] = new Array()
+    let deaths = ExtractNewData(data, 'new_deaths')
 
     Object.keys(deaths).forEach(function (item) {
-      dates.push(item)
-      new_deaths.push(deaths[item][0])
+      datesNewDeaths.push(item)
+      newDeathsPerDay.push(deaths[item][0])
     })
 
-    this.BarChartDataNewDeathsLabels = dates.reverse()
+    this.BarChartDataNewDeathsLabels = datesNewDeaths.reverse()
     this.BarChartDataNewDeathsDataset = [{
-      data: new_deaths.reverse(),
+      data: newDeathsPerDay.reverse(),
       label: 'Nº de novas mortes por dia'
     }]
   }
 
-  openModal(type) {
+  /**
+   * Atribui as propriedades do modal e abre ele
+   * @param type Recebe o tipo de modal que deve ser aberto
+   */
+  openModal(type: String) {
     switch (type) {
       case 'cases':
         this.titleDetailsModal = 'Casos - Detalhes'
