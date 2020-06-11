@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { AnimationOptions } from "ngx-lottie"
 
 @Component({
@@ -8,15 +8,14 @@ import { AnimationOptions } from "ngx-lottie"
 })
 export class LoadingComponent implements OnInit {
 
-  @Input() condition: any
-  
   options: AnimationOptions = {
     path: '/assets/animations/loading.json'
   }
 
   styles: Partial<CSSStyleDeclaration> = {
-    marginLeft: '275px',
-    marginTop: '0px'
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   }
 
   constructor() { }

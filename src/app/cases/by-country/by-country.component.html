@@ -44,7 +44,7 @@
         </po-widget>
     </div>
     <!-- <div class="po-row"> -->
-        <!-- <po-chart *ngIf="newCasesPerStateData.length > 0" class="po-lg-4 po-mt-2" [p-height]="480"
+    <!-- <po-chart *ngIf="newCasesPerStateData.length > 0" class="po-lg-4 po-mt-2" [p-height]="480"
             p-title="Novos casos por Estado" [p-series]="newCasesPerStateData" [p-type]="newCasesPerStateType">
         </po-chart> -->
     <!-- </div> -->
@@ -52,6 +52,7 @@
         <po-container [p-no-border]="true" class="po-lg-8">
             <span class="po-font-text-bold">Número de casos acumulados por dia no Brasil</span>
         </po-container>
+        <app-loading *ngIf="BarChartDataNewDeathsDataset.length == 0"></app-loading>
         <canvas *ngIf="LineChartDataAcumulatedCasesDataset.length > 0" baseChart width="400" height="200"
             [datasets]="LineChartDataAcumulatedCasesDataset" [labels]="LineChartDataAcumulatedCasesLabels"
             [options]="ChartOptions" [colors]="LineChartDataAcumulatedCasesColors" [legend]="ChartLegend"
@@ -62,6 +63,7 @@
         <po-container [p-no-border]="true" class="po-lg-8">
             <span class="po-font-text-bold">Número de mortes acumuladas por dia no Brasil</span>
         </po-container>
+        <app-loading *ngIf="BarChartDataNewDeathsDataset.length == 0"></app-loading>
         <canvas *ngIf="LineChartDataAcumulatedDeathsDataset.length > 0" baseChart width="400" height="200"
             [datasets]="LineChartDataAcumulatedDeathsDataset" [labels]="LineChartDataAcumulatedDeathsLabels"
             [options]="ChartOptions" [colors]="LineChartDataAcumulatedDeathsColors" [legend]="ChartLegend"
@@ -72,6 +74,7 @@
         <po-container [p-no-border]="true" class="po-lg-8">
             <span class="po-font-text-bold">Número de novos casos por dia no Brasil</span>
         </po-container>
+        <app-loading *ngIf="BarChartDataNewDeathsDataset.length == 0"></app-loading>
         <canvas *ngIf="BarChartDataNewCasesDataset.length > 0" baseChart width="400" height="200"
             [datasets]="BarChartDataNewCasesDataset" [labels]="BarChartDataNewCasesLabels" [options]="ChartOptions"
             [colors]="BarChartDataNewCasesColors" [legend]="ChartLegend" [chartType]="BarChartType"
@@ -82,6 +85,7 @@
         <po-container [p-no-border]="true" class="po-lg-8">
             <span class="po-font-text-bold">Número de novas mortes por dia no Brasil</span>
         </po-container>
+        <app-loading *ngIf="BarChartDataNewDeathsDataset.length == 0"></app-loading>
         <canvas *ngIf="BarChartDataNewDeathsDataset.length > 0" baseChart width="400" height="200"
             [datasets]="BarChartDataNewDeathsDataset" [labels]="BarChartDataNewDeathsLabels" [options]="ChartOptions"
             [colors]="BarChartDataNewDeathsColors" [legend]="ChartLegend" [chartType]="BarChartType"

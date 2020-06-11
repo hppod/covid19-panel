@@ -38,12 +38,6 @@ export class PreventionComponent implements OnInit {
     marginRight: 'auto'
   }
 
-  stylesDoctors: Partial<CSSStyleDeclaration> = {
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto'
-  }
-
   constructor() { }
 
   ngOnInit(): void {
