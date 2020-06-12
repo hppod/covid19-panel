@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from "@angular/router"
 import { Subscription } from "rxjs"
 import { APIService } from "../../services/api.service"
-import { Caso } from "../../models/caso.model"
+import { CasoFull } from "../../models/caso_full.model"
 
 @Component({
   selector: 'app-by-state',
@@ -11,11 +11,11 @@ import { Caso } from "../../models/caso.model"
 })
 export class ByStateComponent implements OnInit, OnDestroy {
 
-  limit: number = 50
+  limit: number = 30
   statusResponse: number
   request: Subscription
   isLoading: boolean
-  Data: Caso[] = new Array
+  Data: CasoFull[] = new Array
 
   constructor(
     private _router: Router,
@@ -25,27 +25,10 @@ export class ByStateComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false
-    this._service.params = this._service.params.append('is_last', 'True')
-    this._service.params = this._service.params.append('page', '1')
-    this._service.params = this._service.params.append('place_type', 'state')
-    this._service.params = this._service.params.append('page_size', this.limit.toString())
-    this.getDataCasos()
   }
 
   ngOnDestroy(): void {
     this.request.unsubscribe()
-  }
-
-  getDataCasos() {
-    this.isLoading = true
-    this.request = this._service.getDataCasos().subscribe(response => {
-      this.Data = response.body['results']
-      this.statusResponse = response.status
-      this.isLoading = false
-    }, err => {
-      this.statusResponse = 500
-      this.isLoading = false
-    })
   }
 
 }
