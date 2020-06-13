@@ -5,6 +5,7 @@ import { APIService } from "../../services/api.service"
 import { CasoFull } from "../../models/caso_full.model"
 import { PoTableColumn, PoChartType, PoPieChartSeries } from '@po-ui/ng-components';
 import { ExtractNewDataPerState } from 'src/app/functions/utils';
+import { GoogleChartInterface } from "ng2-google-charts"
 
 @Component({
   selector: 'app-by-state',
@@ -38,6 +39,26 @@ export class ByStateComponent implements OnInit, OnDestroy {
     { property: 'new_deaths', label: 'Novas mortes', type: 'number' },
   ];
 
+  public geoChartCases: GoogleChartInterface = {
+    chartType: 'GeoChart',
+    options: {
+      'region': 'BR',
+      'resolution': 'provinces',
+      'displayMode': 'regions',
+      'colorAxis': {}
+    }
+  }
+
+  public geoChartDeaths: GoogleChartInterface = {
+    chartType: 'GeoChart',
+    options: {
+      'region': 'BR',
+      'resolution': 'provinces',
+      'displayMode': 'regions',
+      'colorAxis': {}
+    }
+  }
+
   ngOnInit(): void {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false
     this._service.params = this._service.params.set('had_cases', 'True')
@@ -56,12 +77,38 @@ export class ByStateComponent implements OnInit, OnDestroy {
       this.Data = response.body['results']
       this.newCasesPerStateData = ExtractNewDataPerState(this.Data, 'new_confirmed', 8)
       this.newDeathsPerStateData = ExtractNewDataPerState(this.Data, 'new_deaths', 8)
+      this.geoChartCases.dataTable = this.getDataGeoChart(this.Data, 'cases')
+      this.geoChartDeaths.dataTable = this.getDataGeoChart(this.Data, 'deaths')
       this.statusResponse = 200
       this.isLoading = false
     }, err => {
       this.statusResponse = 500
       this.isLoading = false
     })
+  }
+
+  getDataGeoChart(data: CasoFull[], ChartType: string) {
+    let geoChartData = new Array()
+
+    if (ChartType == 'cases') {
+      this.geoChartCases.options['colorAxis'] = { colors: ['#b3f4ff', '#008299'] }
+      geoChartData.push(['Estado', 'Nº de casos'])
+      data.forEach(element => {
+        geoChartData.push([
+          `BR-${element['state']}`, element['last_available_confirmed']
+        ])
+      })
+    } else {
+      this.geoChartDeaths.options['colorAxis'] = { colors: ['#ffcccc', '#b30000'] }
+      geoChartData.push(['Estado', 'Nº de mortes'])
+      data.forEach(element => {
+        geoChartData.push([
+          `BR-${element['state']}`, element['last_available_deaths']
+        ])
+      })
+    }
+
+    return geoChartData
   }
 
 }
