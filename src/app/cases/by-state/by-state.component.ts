@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from "@angular/router"
 import { Subscription } from "rxjs"
 import { APIService } from "../../services/api.service"
 import { CasoFull } from "../../models/caso_full.model"
-import { PoTableColumn, PoChartType, PoPieChartSeries, PoTableLiterals } from '@po-ui/ng-components';
+import { PoTableColumn, PoChartType, PoPieChartSeries, PoTableLiterals, PoTableAction, PoModalComponent } from '@po-ui/ng-components';
 import { ExtractNewDataPerState } from 'src/app/functions/utils';
 import { GoogleChartInterface, ChartErrorEvent } from "ng2-google-charts"
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-by-state',
@@ -14,11 +15,19 @@ import { GoogleChartInterface, ChartErrorEvent } from "ng2-google-charts"
 })
 export class ByStateComponent implements OnInit, OnDestroy {
 
+  @ViewChild(PoModalComponent, { static: true }) poModal: PoModalComponent
+
   limit: number = 30
   statusResponse: number
   request: Subscription
   isLoading: boolean
+  isLoadingDetails: boolean
+  titleModalDetails: string
   Data: CasoFull[] = new Array()
+  DataDetails: CasoFull[] = new Array()
+  actions: PoTableAction[] = [
+    { 'label': 'Ver detalhes', 'action': this.openModal.bind(this) }
+  ]
 
   ChartTypeDonut: PoChartType = PoChartType.Donut
   newCasesPerStateData: Array<PoPieChartSeries> = new Array()
@@ -28,6 +37,7 @@ export class ByStateComponent implements OnInit, OnDestroy {
     private _router: Router,
     private _service: APIService,
   ) {
+    this._service.params = new HttpParams()
   }
 
   public readonly customLiterals: PoTableLiterals =
@@ -93,6 +103,21 @@ export class ByStateComponent implements OnInit, OnDestroy {
     })
   }
 
+  getDataCasosDetailsRequest(stateDetails: string) {
+    this.isLoadingDetails = true
+    this._service.params = this._service.params.delete('is_last')
+    this._service.params = this._service.params.set('state', stateDetails)
+    this.request = this._service.getDataCasosFull().subscribe(response => {
+      this.DataDetails = response.body['results']
+      console.log(this.DataDetails)
+      this.statusResponse = 200
+      this.isLoadingDetails = false
+    }, err => {
+      this.statusResponse = 500
+      this.isLoadingDetails = false
+    })
+  }
+
   getDataGeoChart(data: CasoFull[], ChartType: string) {
     let geoChartData = new Array()
 
@@ -119,6 +144,14 @@ export class ByStateComponent implements OnInit, OnDestroy {
 
   error(event: ChartErrorEvent) {
     return 'Erro ao carregar o gráfico, tente novamente mais tarde'
+  }
+
+  openModal(row: CasoFull) {
+    this.titleModalDetails = `Dados por estado - ${row['state']}`
+
+    this.getDataCasosDetailsRequest(row['state'])
+
+    this.poModal.open()
   }
 
 }

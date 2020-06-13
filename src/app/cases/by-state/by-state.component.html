@@ -18,7 +18,8 @@
         </po-container>
         <po-container [p-no-border]="true" class="po-lg-6 po-md-6 po-sm-12 po-mt-1">
             <po-container *ngIf="!isLoading" class="po-lg-12 po-md-12 po-sm-12">
-                <po-table [p-columns]="columnsDetails" [p-items]="Data" [p-literals]="customLiterals"> </po-table>
+                <po-table [p-columns]="columnsDetails" [p-items]="Data" [p-literals]="customLiterals"
+                    [p-actions]="actions"> </po-table>
             </po-container>
             <po-chart *ngIf="newDeathsPerStateData.length > 0" class="po-lg-12 po-md-12 po-sm-12 po-mt-2"
                 p-title="Novas mortes por Estado" [p-series]="newDeathsPerStateData" [p-type]="ChartTypeDonut">
@@ -26,3 +27,6 @@
         </po-container>
     </div>
 </po-page-detail>
+
+<po-modal p-click-out="true" [p-title]="titleModalDetails">
+</po-modal>
