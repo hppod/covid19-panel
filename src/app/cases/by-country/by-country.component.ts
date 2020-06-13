@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { ExtractAccumulatedData, ExtractNewData, CalculateNewData } from 'src/app/functions/utils';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-by-country',
@@ -94,7 +95,9 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   constructor(
     private _router: Router,
     private _service: APIService
-  ) { }
+  ) {
+    this._service.params = new HttpParams()
+  }
 
   ngOnInit(): void {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false
