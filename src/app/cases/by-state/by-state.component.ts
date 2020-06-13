@@ -5,7 +5,7 @@ import { APIService } from "../../services/api.service"
 import { CasoFull } from "../../models/caso_full.model"
 import { PoTableColumn, PoChartType, PoPieChartSeries } from '@po-ui/ng-components';
 import { ExtractNewDataPerState } from 'src/app/functions/utils';
-import { GoogleChartInterface } from "ng2-google-charts"
+import { GoogleChartInterface, ChartErrorEvent } from "ng2-google-charts"
 
 @Component({
   selector: 'app-by-state',
@@ -109,6 +109,10 @@ export class ByStateComponent implements OnInit, OnDestroy {
     }
 
     return geoChartData
+  }
+
+  error(event: ChartErrorEvent) {
+    return 'Erro ao carregar o gráfico, tente novamente mais tarde'
   }
 
 }
