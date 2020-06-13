@@ -91,6 +91,6 @@
     </po-container>
 </po-page-detail>
 
-<po-modal #detailsModal [p-title]="titleDetailsModal">
+<po-modal #detailsModal p-click-out="true" [p-title]="titleDetailsModal">
     <po-table [p-columns]="columnsDetails" [p-items]="itemsDetails" [p-literals]="customLiterals"> </po-table>
 </po-modal>
