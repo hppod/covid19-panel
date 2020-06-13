@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from "rxjs"
 import { APIService } from "./../../services/api.service"
 import { CasoFull } from "./../../models/caso_full.model"
-import { PoModalComponent, PoTableColumn, PoPieChartSeries, PoChartType } from '@po-ui/ng-components';
+import { PoModalComponent, PoTableColumn, PoPieChartSeries, PoChartType, PoTableLiterals } from '@po-ui/ng-components';
 import { Caso } from 'src/app/models/caso.model';
 import { Router } from '@angular/router';
 import { ChartDataSets, ChartOptions } from 'chart.js';
@@ -32,6 +32,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   totalCounties: number = 0
   totalCountiesWithCases: number = 0
   totalCountiesWithDeaths: number = 0
+  customLiterals: PoTableLiterals = { 'noData': 'Sem dados a serem exibidos', 'loadingData': 'Carregando' }
 
   /**Options charts */
   public LineChartType = 'line'

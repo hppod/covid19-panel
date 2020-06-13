@@ -3,7 +3,7 @@ import { Router } from "@angular/router"
 import { Subscription } from "rxjs"
 import { APIService } from "../../services/api.service"
 import { CasoFull } from "../../models/caso_full.model"
-import { PoTableColumn, PoChartType, PoPieChartSeries } from '@po-ui/ng-components';
+import { PoTableColumn, PoChartType, PoPieChartSeries, PoTableLiterals } from '@po-ui/ng-components';
 import { ExtractNewDataPerState } from 'src/app/functions/utils';
 import { GoogleChartInterface, ChartErrorEvent } from "ng2-google-charts"
 
@@ -30,13 +30,19 @@ export class ByStateComponent implements OnInit, OnDestroy {
   ) {
   }
 
+  public readonly customLiterals: PoTableLiterals =
+    {
+      'noData': 'Sem dados a serem exibidos',
+      'loadingData': 'Carregando'
+    }
+
   public readonly columnsDetails: Array<PoTableColumn> = [
     { property: 'last_available_date', label: 'Data', type: 'date' },
     { property: 'state', label: 'Estado', type: 'string' },
     { property: 'last_available_confirmed', label: 'Casos', type: 'number' },
     { property: 'new_confirmed', label: 'Novos casos', type: 'number' },
     { property: 'last_available_deaths', label: 'Mortes', type: 'number' },
-    { property: 'new_deaths', label: 'Novas mortes', type: 'number' },
+    { property: 'new_deaths', label: 'Novas mortes', type: 'number' }
   ];
 
   public geoChartCases: GoogleChartInterface = {
