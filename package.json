@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng build --prod --aot && node server.js",
+    "start": "npm install && ng build --prod --aot && node server.js",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
