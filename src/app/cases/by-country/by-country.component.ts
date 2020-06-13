@@ -79,9 +79,6 @@ export class ByCountryComponent implements OnInit, OnDestroy {
     }
   ]
 
-  newCasesPerStateType: PoChartType = PoChartType.Donut
-  newCasesPerStateData: Array<PoPieChartSeries> = new Array()
-
   @ViewChild('detailsModal', { static: true }) detailsModalElement: PoModalComponent
 
   public readonly columnsDetails: Array<PoTableColumn> = [
@@ -120,7 +117,6 @@ export class ByCountryComponent implements OnInit, OnDestroy {
       this.numberOfNewDeaths = this.calculateNewDeaths(this.Data)
       this.itemsCasesDetails = this.setCasesDetails(this.Data)
       this.itemsDeathsDetails = this.setDeathsDetails(this.Data)
-      this.newCasesPerStateData = this.setNewCasesByState(this.Data)
     }, err => {
     })
   }
@@ -230,19 +226,6 @@ export class ByCountryComponent implements OnInit, OnDestroy {
       }
     }
     return countiesWithDeaths
-  }
-
-  setNewCasesByState(data: CasoFull[]): Array<PoPieChartSeries> {
-    let casesByState: PoPieChartSeries[] = new Array()
-    let top: PoPieChartSeries[] = new Array()
-    for (let i = 0; i < data.length; i++) {
-      casesByState.push({
-        category: data[i]['state'],
-        value: data[i]['new_confirmed']
-      })
-    }
-    top = casesByState.sort((a, b) => b.value - a.value).slice(0, 8)
-    return top
   }
 
   setCasesDetails(data: CasoFull[]): any[] {
