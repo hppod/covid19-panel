@@ -22,6 +22,7 @@ export class ByStateComponent implements OnInit, OnDestroy {
 
   limit: number = 30
   statusResponse: number
+  dateOfData: string
   request: Subscription
   isLoading: boolean
   isLoadingDetails: boolean
@@ -127,6 +128,7 @@ export class ByStateComponent implements OnInit, OnDestroy {
     this.isLoading = true
     this.request = this._service.getDataCasosFull().subscribe(response => {
       this.Data = response.body['results']
+      this.dateOfData = response.body['results'][0]['date']
       this.newCasesPerStateData = ExtractNewDataPerState(this.Data, 'new_confirmed', 8)
       this.newDeathsPerStateData = ExtractNewDataPerState(this.Data, 'new_deaths', 8)
       this.geoChartCases.dataTable = this.getDataGeoChart(this.Data, 'cases')

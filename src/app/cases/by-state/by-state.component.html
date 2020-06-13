@@ -1,6 +1,8 @@
 <po-page-detail p-title="Casos por Estado">
     <app-loading *ngIf="isLoading"></app-loading>
     <app-error [condition]="statusResponse == 500 "></app-error>
+    <span *ngIf="!isLoading" class="date-updated">Última atualização dos dados feita em
+        {{dateOfData | date: 'dd/MM/yyyy'}}</span>
     <div *ngIf="statusResponse == 200 && !isLoading" class="po-row">
         <po-container [p-no-border]="true" class="po-lg-6 po-md-12 po-sm-12 po-mt-1">
             <app-loading *ngIf="isLoading"></app-loading>
