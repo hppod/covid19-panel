@@ -5,11 +5,11 @@
         <po-container [p-no-border]="true" class="po-lg-6 po-md-12 po-sm-12 po-mt-1">
             <app-loading *ngIf="isLoading"></app-loading>
             <po-container *ngIf="!isLoading" class="po-lg-12 po-md-12 po-sm-12">
-                <span class="po-font-text-uppercase">Casos confirmados no Brasil</span>
+                <span class="po-font-text-bold">Casos confirmados no Brasil</span>
                 <google-chart [data]="geoChartCases" (chartError)='error($event)'></google-chart>
             </po-container>
             <po-container *ngIf="!isLoading" class="po-lg-12 po-md-12 po-sm-12 po-mt-2">
-                <span class="po-font-text-uppercase">Mortes confirmadas no Brasil</span>
+                <span class="po-font-text-bold">Mortes confirmadas no Brasil</span>
                 <google-chart [data]="geoChartDeaths" (chartError)='error($event)'></google-chart>
             </po-container>
             <po-chart *ngIf="newCasesPerStateData.length > 0" class="po-lg-12 po-md-12 po-sm-12 po-mt-2"
