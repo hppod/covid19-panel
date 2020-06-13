@@ -6,7 +6,10 @@ import { CasoFull } from "../../models/caso_full.model"
 import { PoTableColumn, PoChartType, PoPieChartSeries, PoTableLiterals, PoTableAction, PoModalComponent } from '@po-ui/ng-components';
 import { ExtractNewDataPerState } from 'src/app/functions/utils';
 import { GoogleChartInterface, ChartErrorEvent } from "ng2-google-charts"
-import { HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http'
+import { CalculateNew, ExtractNewData } from "./../../functions/utils"
+import { ChartDataSets, ChartOptions } from 'chart.js';
+import { Label, Color } from 'ng2-charts';
 
 @Component({
   selector: 'app-by-state',
@@ -23,6 +26,9 @@ export class ByStateComponent implements OnInit, OnDestroy {
   isLoading: boolean
   isLoadingDetails: boolean
   titleModalDetails: string
+  dateDetails: string
+  titleNewCasesDetails: string
+  titleNewDeathsDetails: string
   Data: CasoFull[] = new Array()
   DataDetails: CasoFull[] = new Array()
   actions: PoTableAction[] = [
@@ -32,6 +38,10 @@ export class ByStateComponent implements OnInit, OnDestroy {
   ChartTypeDonut: PoChartType = PoChartType.Donut
   newCasesPerStateData: Array<PoPieChartSeries> = new Array()
   newDeathsPerStateData: Array<PoPieChartSeries> = new Array()
+  numberOfCases: number = 0
+  numberOfNewCases: number = 0
+  numberOfDeaths: number = 0
+  numberOfNewDeaths: number = 0
 
   constructor(
     private _router: Router,
@@ -75,6 +85,32 @@ export class ByStateComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**Options charts */
+  public BarChartType = 'bar'
+  public ChartLegend = true
+  public ChartPlugins = []
+  public ChartOptions: ChartOptions = {
+    responsive: true
+  }
+
+  /**Bar chart new cases */
+  public BarChartDataNewCasesDataset: ChartDataSets[] = []
+  public BarChartDataNewCasesLabels: Label[] = new Array()
+  public BarChartDataNewCasesColors: Color[] = [
+    {
+      backgroundColor: 'rgb(0,0,255)',
+    }
+  ]
+
+  /**Bar chart new deaths */
+  public BarChartDataNewDeathsDataset: ChartDataSets[] = []
+  public BarChartDataNewDeathsLabels: Label[] = new Array()
+  public BarChartDataNewDeathsColors: Color[] = [
+    {
+      backgroundColor: 'rgb(255,0,0)',
+    }
+  ]
+
   ngOnInit(): void {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false
     this._service.params = this._service.params.set('had_cases', 'True')
@@ -109,6 +145,13 @@ export class ByStateComponent implements OnInit, OnDestroy {
     this._service.params = this._service.params.set('state', stateDetails)
     this.request = this._service.getDataCasosFull().subscribe(response => {
       this.DataDetails = response.body['results']
+      this.dateDetails = this.DataDetails[0]['date']
+      this.getDataBarChartNewCases(this.DataDetails)
+      this.getDataBarChartNewDeaths(this.DataDetails)
+      this.numberOfCases = this.DataDetails[0]['last_available_confirmed']
+      this.numberOfDeaths = this.DataDetails[0]['last_available_deaths']
+      this.numberOfNewCases = CalculateNew(this.DataDetails, 'new_confirmed')
+      this.numberOfNewDeaths = CalculateNew(this.DataDetails, 'new_deaths')
       console.log(this.DataDetails)
       this.statusResponse = 200
       this.isLoadingDetails = false
@@ -142,16 +185,61 @@ export class ByStateComponent implements OnInit, OnDestroy {
     return geoChartData
   }
 
+  /**GeoChart */
   error(event: ChartErrorEvent) {
     return 'Erro ao carregar o gráfico, tente novamente mais tarde'
   }
 
   openModal(row: CasoFull) {
     this.titleModalDetails = `Dados por estado - ${row['state']}`
+    this.titleNewCasesDetails = `Número de novos casos - ${row['state']}`
+    this.titleNewDeathsDetails = `Número de novas mortes - ${row['state']}`
 
     this.getDataCasosDetailsRequest(row['state'])
 
     this.poModal.open()
+  }
+
+  /**
+  * Extrai os dados de novos casos por dia e atribui-os aos sets do gráfico de barras
+  * @param data Recebe os dados vindos da requisição feita a API
+  */
+  getDataBarChartNewCases(data: CasoFull[]) {
+    let newCasesPerDay: number[] = new Array()
+    let datesNewCases: string[] = new Array()
+    let cases = ExtractNewData(data, 'new_confirmed')
+
+    Object.keys(cases).forEach(function (item) {
+      datesNewCases.push(item)
+      newCasesPerDay.push(cases[item][0])
+    })
+
+    this.BarChartDataNewCasesLabels = datesNewCases.reverse()
+    this.BarChartDataNewCasesDataset = [{
+      data: newCasesPerDay.reverse(),
+      label: 'Nº de novos casos por dia'
+    }]
+  }
+
+  /**
+   * Extrai os dados de novas mortes por dia e atribui-os aos sets do gráfico de barras
+   * @param data Recebe os dados vindos da requisição feita a API
+   */
+  getDataBarChartNewDeaths(data: CasoFull[]) {
+    let newDeathsPerDay: number[] = new Array()
+    let datesNewDeaths: string[] = new Array()
+    let deaths = ExtractNewData(data, 'new_deaths')
+
+    Object.keys(deaths).forEach(function (item) {
+      datesNewDeaths.push(item)
+      newDeathsPerDay.push(deaths[item][0])
+    })
+
+    this.BarChartDataNewDeathsLabels = datesNewDeaths.reverse()
+    this.BarChartDataNewDeathsDataset = [{
+      data: newDeathsPerDay.reverse(),
+      label: 'Nº de novas mortes por dia'
+    }]
   }
 
 }

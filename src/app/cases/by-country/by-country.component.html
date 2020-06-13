@@ -1,6 +1,6 @@
-<app-error [condition]="statusResponse == 500 "></app-error>
 <po-page-detail p-title="Casos no País">
     <app-loading *ngIf="isLoading"></app-loading>
+    <app-error [condition]="statusResponse == 500 "></app-error>
     <span *ngIf="!isLoading" class="date-updated">Última atualização dos dados feita em
         {{dateOfData | date: 'dd/MM/yyyy'}}</span>
     <div *ngIf="!isLoading" class="po-row">
