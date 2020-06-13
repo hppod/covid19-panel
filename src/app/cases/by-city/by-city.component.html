@@ -1,5 +1,4 @@
 <app-error [condition]="statusResponse == 500 "></app-error>
-<app-loading-full [condition]="Data.length == 0"></app-loading-full>
 <po-page-detail *ngIf="statusResponse == 200 && !isLoading" p-title="Casos por Cidade">
     <div class="po-row">
         <div [formGroup]="SearchByStateForm">

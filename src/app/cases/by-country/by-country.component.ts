@@ -18,6 +18,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
 
   request: Subscription
   statusResponse: number
+  isLoading: boolean = false
   Data: CasoFull[] = new Array()
   dateOfData: string
   titleDetailsModal: string
@@ -108,6 +109,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   }
 
   getDataCasosFull() {
+    this.isLoading = true
     this.request = this._service.getDataCasosFull().subscribe(response => {
       this.Data = response.body['results']
       this.dateOfData = response.body['results'][0]['date']
@@ -117,7 +119,10 @@ export class ByCountryComponent implements OnInit, OnDestroy {
       this.numberOfNewDeaths = this.calculateNewDeaths(this.Data)
       this.itemsCasesDetails = this.setCasesDetails(this.Data)
       this.itemsDeathsDetails = this.setDeathsDetails(this.Data)
+      this.isLoading = false
     }, err => {
+      this.statusResponse = 500
+      this.isLoading = false
     })
   }
 

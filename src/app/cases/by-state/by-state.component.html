@@ -1,6 +1,7 @@
 <app-error [condition]="statusResponse == 500 "></app-error>
-<po-page-detail *ngIf="statusResponse == 200 && !isLoading" p-title="Casos por Estado">
-    <div class="po-row">
+<po-page-detail p-title="Casos por Estado">
+    <app-loading *ngIf="isLoading"></app-loading>
+    <div *ngIf="statusResponse == 200 && !isLoading" class="po-row">
         <po-container [p-no-border]="true" class="po-lg-6 po-md-12 po-sm-12 po-mt-1">
             <app-loading *ngIf="isLoading"></app-loading>
             <po-container *ngIf="!isLoading" class="po-lg-12 po-md-12 po-sm-12">

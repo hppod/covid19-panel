@@ -21,7 +21,6 @@ import { LoadingComponent } from './components/loading/loading.component';
 import { ByCountryComponent } from './cases/by-country/by-country.component';
 import { AboutComponent } from './about/about.component';
 import { ErrorComponent } from './components/error/error.component';
-import { LoadingFullComponent } from './components/loading-full/loading-full.component';
 import { PreventionComponent } from './prevention/prevention.component';
 import { NoDataComponent } from './components/no-data/no-data.component';
 
@@ -46,7 +45,6 @@ registerLocaleData(localePt, 'pt-BR');
     ByCountryComponent,
     AboutComponent,
     ErrorComponent,
-    LoadingFullComponent,
     PreventionComponent,
     NoDataComponent
   ],
