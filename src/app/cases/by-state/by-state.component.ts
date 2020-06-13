@@ -152,7 +152,6 @@ export class ByStateComponent implements OnInit, OnDestroy {
       this.numberOfDeaths = this.DataDetails[0]['last_available_deaths']
       this.numberOfNewCases = CalculateNew(this.DataDetails, 'new_confirmed')
       this.numberOfNewDeaths = CalculateNew(this.DataDetails, 'new_deaths')
-      console.log(this.DataDetails)
       this.statusResponse = 200
       this.isLoadingDetails = false
     }, err => {
