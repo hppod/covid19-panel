@@ -1,4 +1,5 @@
 import { CasoFull } from "./../models/caso_full.model"
+import { PoPieChartSeries } from '@po-ui/ng-components'
 
 /**
  * Função que recebe um dataset de dados e os acumula, agrupando-os por datas.
@@ -86,5 +87,33 @@ export function CalculateNewData(Dataset: CasoFull[], PropertyName: String) {
             }, {})
     }
 
+}
 
+/**
+ * Função que agrupa os dados de novos casos ou novas mortes de acordo com a quantidade de registros determinada pelo parâmetro MaxResults
+ * @param Dataset Recebe o dataset dos dados a serem trabalhados.
+ * @param PropertyName Recebe o nome da propriedade que deve ser levada em consideração para realizar o agrupamento dos dados.
+ * @param MaxResults Recebe o valor de resultados máximos que devem ser retornados pela função
+ */
+export function ExtractNewDataPerState(Dataset: CasoFull[], PropertyName: String, MaxResults: number): Array<PoPieChartSeries> {
+    switch (PropertyName) {
+        case PropertyName = 'new_confirmed':
+            let cases: PoPieChartSeries[] = new Array()
+            Dataset.forEach(element => {
+                cases.push({
+                    category: element['state'],
+                    value: element['new_confirmed']
+                })
+            })
+            return cases.sort((a, b) => b.value - a.value).slice(0, MaxResults)
+        case PropertyName = 'new_deaths':
+            let deaths: PoPieChartSeries[] = new Array()
+            Dataset.forEach(element => {
+                deaths.push({
+                    category: element['state'],
+                    value: element['new_deaths']
+                })
+            })
+            return deaths.sort((a, b) => b.value - a.value).slice(0, MaxResults)
+    }
 }

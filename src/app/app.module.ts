@@ -9,6 +9,7 @@ import { PoTemplatesModule } from "@po-ui/ng-templates"
 import { LottieModule } from "ngx-lottie"
 import { NgxPaginationModule } from "ngx-pagination"
 import { ChartsModule } from "ng2-charts"
+import { Ng2GoogleChartsModule, GoogleChartsSettings } from "ng2-google-charts"
 import player from 'lottie-web'
 import localePt from '@angular/common/locales/pt';
 import { ROUTES } from "./app.routing"
@@ -26,6 +27,12 @@ import { NoDataComponent } from './components/no-data/no-data.component';
 
 export function playerFactory() {
   return player
+}
+
+const MyGoogleChartsSettings: GoogleChartsSettings = {
+  mapsApiKey: 'AIzaSyAKSaz72vczni6FQMbA3hTHoZzXt7Yf0eE',
+  googleChartsVersion: '47',
+  language: 'pt_BR'
 }
 
 registerLocaleData(localePt, 'pt-BR');
@@ -53,11 +60,13 @@ registerLocaleData(localePt, 'pt-BR');
     PoTemplatesModule,
     LottieModule.forRoot({ player: playerFactory }),
     NgxPaginationModule,
-    ChartsModule
+    ChartsModule,
+    Ng2GoogleChartsModule
   ],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
-    { provide: LOCALE_ID, useValue: 'pt-BR' }
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
+    { provide: 'googleChartsSettings', useValue: MyGoogleChartsSettings }
   ],
   bootstrap: [AppComponent]
 })

@@ -1,26 +1,27 @@
 <app-error [condition]="statusResponse == 500 "></app-error>
-<app-loading-full [condition]="isLoading"></app-loading-full>
 <po-page-detail *ngIf="statusResponse == 200 && !isLoading" p-title="Casos por Estado">
-    <po-container [p-no-shadow]="true" [p-no-border]="true">
-        <po-container *ngFor="let case of Data" class="po-lg-3 po-mt-2">
-            <div class="po-row">
-                <span class="po-font-subtitle">{{case['city']}}</span>
-            </div>
-            <div class="po-row">
-                <span class="po-font-subtitle">{{case['state']}}</span>
-            </div>
-            <hr />
-            <div class="po-row">
-                <po-info class="po-md-12" p-orientation="horizontal" p-label="População estimada"
-                    p-value="{{case['estimated_population_2019'] | number}}">
-                </po-info>
-                <po-info class="po-md-12" p-orientation="horizontal" p-label="Casos confirmados"
-                    p-value="{{case['confirmed'] | number}}">
-                </po-info>
-                <po-info class="po-md-12" p-orientation="horizontal" p-label="Número de mortes"
-                    p-value="{{case['deaths'] | number}}"> </po-info>
-            </div>
-            <span class="date-updated">Dados atualizados em {{case['date'] | date: 'dd/MM/yyyy'}}</span>
+    <div class="po-row">
+        <po-container [p-no-border]="true" class="po-lg-6 po-md-12 po-sm-12 po-mt-1">
+            <app-loading *ngIf="isLoading"></app-loading>
+            <po-container *ngIf="!isLoading" class="po-lg-12 po-md-12 po-sm-12">
+                <span class="po-font-text-uppercase">Casos confirmados no Brasil</span>
+                <google-chart [data]="geoChartCases" (chartError)='error($event)'></google-chart>
+            </po-container>
+            <po-container *ngIf="!isLoading" class="po-lg-12 po-md-12 po-sm-12 po-mt-2">
+                <span class="po-font-text-uppercase">Mortes confirmadas no Brasil</span>
+                <google-chart [data]="geoChartDeaths" (chartError)='error($event)'></google-chart>
+            </po-container>
+            <po-chart *ngIf="newCasesPerStateData.length > 0" class="po-lg-12 po-md-12 po-sm-12 po-mt-2"
+                p-title="Novos casos por Estado" [p-series]="newCasesPerStateData" [p-type]="ChartTypeDonut">
+            </po-chart>
         </po-container>
-    </po-container>
+        <po-container [p-no-border]="true" class="po-lg-6 po-md-6 po-sm-12 po-mt-1">
+            <po-container *ngIf="!isLoading" class="po-lg-12 po-md-12 po-sm-12">
+                <po-table [p-columns]="columnsDetails" [p-items]="Data"> </po-table>
+            </po-container>
+            <po-chart *ngIf="newDeathsPerStateData.length > 0" class="po-lg-12 po-md-12 po-sm-12 po-mt-2"
+                p-title="Novas mortes por Estado" [p-series]="newDeathsPerStateData" [p-type]="ChartTypeDonut">
+            </po-chart>
+        </po-container>
+    </div>
 </po-page-detail>
