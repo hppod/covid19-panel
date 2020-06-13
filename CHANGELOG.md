@@ -2,7 +2,7 @@
 
 Log de alterações da aplicação.
 
-**VERSÃO 1.2**
+**VERSÃO 1.3**
   - **Estados** - Reformulação do painel Estados, melhorando a visualização dos cards para uma tabela.
   - **Estados** - O gráfico "Novos casos por estado" que ficava no painel "Brasil" foi transferido para o painel "Estados".
   - **Estados** - Adicionado o gráfico "Novas mortes por estado".
