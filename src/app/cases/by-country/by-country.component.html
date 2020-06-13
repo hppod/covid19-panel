@@ -1,7 +1,9 @@
-<app-error [condition]="statusResponse == 500 "></app-error>
-<po-page-detail *ngIf="statusResponse == 200" p-title="Casos no País">
-    <span class="date-updated">Última atualização dos dados feita em {{dateOfData | date: 'dd/MM/yyyy'}}</span>
-    <div class="po-row">
+<po-page-detail p-title="Casos no País">
+    <app-loading *ngIf="isLoading"></app-loading>
+    <app-error [condition]="statusResponse == 500 "></app-error>
+    <span *ngIf="!isLoading" class="date-updated">Última atualização dos dados feita em
+        {{dateOfData | date: 'dd/MM/yyyy'}}</span>
+    <div *ngIf="!isLoading" class="po-row">
         <po-widget class="po-lg-3 po-mt-2" p-primary-label="Ver detalhado" p-title="Casos"
             (p-primary-action)="openModal('cases')">
             <div *ngIf="numberOfCases == 0 && numberOfNewCases == 0" class="po-font-text-smaller po-text-center">
@@ -43,7 +45,7 @@
             </div>
         </po-widget>
     </div>
-    <po-container class="po-lg-6 po-mt-2">
+    <po-container *ngIf="!isLoading" class="po-lg-6 po-mt-2">
         <po-container [p-no-border]="true" class="po-lg-8">
             <span class="po-font-text-bold">Número de casos acumulados por dia no Brasil</span>
         </po-container>
@@ -54,7 +56,7 @@
             [chartType]="LineChartType" [plugins]="ChartPlugins">
         </canvas>
     </po-container>
-    <po-container class="po-lg-6 po-mt-2">
+    <po-container *ngIf="!isLoading" class="po-lg-6 po-mt-2">
         <po-container [p-no-border]="true" class="po-lg-8">
             <span class="po-font-text-bold">Número de mortes acumuladas por dia no Brasil</span>
         </po-container>
@@ -65,7 +67,7 @@
             [chartType]="LineChartType" [plugins]="ChartPlugins">
         </canvas>
     </po-container>
-    <po-container class="po-lg-6 po-mt-2">
+    <po-container *ngIf="!isLoading" class="po-lg-6 po-mt-2">
         <po-container [p-no-border]="true" class="po-lg-8">
             <span class="po-font-text-bold">Número de novos casos por dia no Brasil</span>
         </po-container>
@@ -76,7 +78,7 @@
             [plugins]="ChartPlugins">
         </canvas>
     </po-container>
-    <po-container class="po-lg-6 po-mt-2">
+    <po-container *ngIf="!isLoading" class="po-lg-6 po-mt-2">
         <po-container [p-no-border]="true" class="po-lg-8">
             <span class="po-font-text-bold">Número de novas mortes por dia no Brasil</span>
         </po-container>
@@ -89,6 +91,6 @@
     </po-container>
 </po-page-detail>
 
-<po-modal #detailsModal [p-title]="titleDetailsModal">
-    <po-table [p-columns]="columnsDetails" [p-items]="itemsDetails"> </po-table>
+<po-modal #detailsModal p-click-out="true" [p-title]="titleDetailsModal">
+    <po-table [p-columns]="columnsDetails" [p-items]="itemsDetails" [p-literals]="customLiterals"> </po-table>
 </po-modal>

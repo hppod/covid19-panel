@@ -14,6 +14,7 @@ export class LoadingComponent implements OnInit {
 
   styles: Partial<CSSStyleDeclaration> = {
     display: 'block',
+    marginTop: 'auto',
     marginLeft: 'auto',
     marginRight: 'auto'
   }

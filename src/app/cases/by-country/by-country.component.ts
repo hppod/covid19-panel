@@ -2,12 +2,13 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from "rxjs"
 import { APIService } from "./../../services/api.service"
 import { CasoFull } from "./../../models/caso_full.model"
-import { PoModalComponent, PoTableColumn, PoPieChartSeries, PoChartType } from '@po-ui/ng-components';
+import { PoModalComponent, PoTableColumn, PoTableLiterals } from '@po-ui/ng-components';
 import { Caso } from 'src/app/models/caso.model';
 import { Router } from '@angular/router';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
-import { ExtractAccumulatedData, ExtractNewData, CalculateNewData } from 'src/app/functions/utils';
+import { ExtractAccumulatedData, ExtractNewData, CalculateNew } from 'src/app/functions/utils';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-by-country',
@@ -18,6 +19,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
 
   request: Subscription
   statusResponse: number
+  isLoading: boolean = false
   Data: CasoFull[] = new Array()
   dateOfData: string
   titleDetailsModal: string
@@ -31,6 +33,7 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   totalCounties: number = 0
   totalCountiesWithCases: number = 0
   totalCountiesWithDeaths: number = 0
+  customLiterals: PoTableLiterals = { 'noData': 'Sem dados a serem exibidos', 'loadingData': 'Carregando' }
 
   /**Options charts */
   public LineChartType = 'line'
@@ -92,7 +95,9 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   constructor(
     private _router: Router,
     private _service: APIService
-  ) { }
+  ) {
+    this._service.params = new HttpParams()
+  }
 
   ngOnInit(): void {
     this._router.routeReuseStrategy.shouldReuseRoute = () => false
@@ -108,16 +113,20 @@ export class ByCountryComponent implements OnInit, OnDestroy {
   }
 
   getDataCasosFull() {
+    this.isLoading = true
     this.request = this._service.getDataCasosFull().subscribe(response => {
       this.Data = response.body['results']
       this.dateOfData = response.body['results'][0]['date']
       this.numberOfCases = this.calculateCases(this.Data)
       this.numberOfDeaths = this.calculateDeaths(this.Data)
-      this.numberOfNewCases = this.calculateNewCases(this.Data)
-      this.numberOfNewDeaths = this.calculateNewDeaths(this.Data)
+      this.numberOfNewCases = CalculateNew(this.Data, 'new_confirmed')
+      this.numberOfNewDeaths = CalculateNew(this.Data, 'new_deaths')
       this.itemsCasesDetails = this.setCasesDetails(this.Data)
       this.itemsDeathsDetails = this.setDeathsDetails(this.Data)
+      this.isLoading = false
     }, err => {
+      this.statusResponse = 500
+      this.isLoading = false
     })
   }
 
@@ -186,36 +195,6 @@ export class ByCountryComponent implements OnInit, OnDestroy {
       deaths = deaths + data[i]['last_available_deaths']
     }
     return deaths
-  }
-
-  /**
-   * Extrai os dados de novos casos em relação ao dia anterior
-   * @param data Recebe os dados vindos da requisição feita a API
-   */
-  calculateNewCases(data: CasoFull[]): number {
-    let sumNewCases: any = new Array()
-    let cases = CalculateNewData(data, 'new_confirmed')
-
-    Object.keys(cases).forEach(function (item) {
-      sumNewCases.push(cases[item])
-    })
-
-    return sumNewCases[0][sumNewCases[0].length - 1]
-  }
-
-  /**
-     * Extrai os dados de novas mortes em relação ao dia anterior
-     * @param data Recebe os dados vindos da requisição feita a API
-     */
-  calculateNewDeaths(data: CasoFull[]): number {
-    let sumNewDeaths: any = new Array()
-    let cases = CalculateNewData(data, 'new_deaths')
-
-    Object.keys(cases).forEach(function (item) {
-      sumNewDeaths.push(cases[item])
-    })
-
-    return sumNewDeaths[0][sumNewDeaths[0].length - 1]
   }
 
   calculateDeathsOnCounties(data: Caso[]): number {

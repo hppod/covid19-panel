@@ -2,6 +2,9 @@
 
 Log de alterações da aplicação.
 
+**VERSÃO 1.4**
+  - **Estados** - Adicionado modal de detalhamento do vírus por estado, com gráfico de barras com a evolução dos casos e das mortes.
+
 **VERSÃO 1.3**
   - **Estados** - Reformulação do painel Estados, melhorando a visualização dos cards para uma tabela.
   - **Estados** - O gráfico "Novos casos por estado" que ficava no painel "Brasil" foi transferido para o painel "Estados".

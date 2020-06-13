@@ -1,14 +1,15 @@
-<app-error [condition]="statusResponse == 500 "></app-error>
-<po-page-detail *ngIf="statusResponse == 200 && !isLoading" p-title="Casos por Estado">
-    <div class="po-row">
+<po-page-detail p-title="Casos por Estado">
+    <app-loading *ngIf="isLoading"></app-loading>
+    <app-error [condition]="statusResponse == 500 "></app-error>
+    <div *ngIf="statusResponse == 200 && !isLoading" class="po-row">
         <po-container [p-no-border]="true" class="po-lg-6 po-md-12 po-sm-12 po-mt-1">
             <app-loading *ngIf="isLoading"></app-loading>
             <po-container *ngIf="!isLoading" class="po-lg-12 po-md-12 po-sm-12">
-                <span class="po-font-text-uppercase">Casos confirmados no Brasil</span>
+                <span class="po-font-text-bold">Casos confirmados no Brasil</span>
                 <google-chart [data]="geoChartCases" (chartError)='error($event)'></google-chart>
             </po-container>
             <po-container *ngIf="!isLoading" class="po-lg-12 po-md-12 po-sm-12 po-mt-2">
-                <span class="po-font-text-uppercase">Mortes confirmadas no Brasil</span>
+                <span class="po-font-text-bold">Mortes confirmadas no Brasil</span>
                 <google-chart [data]="geoChartDeaths" (chartError)='error($event)'></google-chart>
             </po-container>
             <po-chart *ngIf="newCasesPerStateData.length > 0" class="po-lg-12 po-md-12 po-sm-12 po-mt-2"
@@ -17,7 +18,8 @@
         </po-container>
         <po-container [p-no-border]="true" class="po-lg-6 po-md-6 po-sm-12 po-mt-1">
             <po-container *ngIf="!isLoading" class="po-lg-12 po-md-12 po-sm-12">
-                <po-table [p-columns]="columnsDetails" [p-items]="Data"> </po-table>
+                <po-table [p-columns]="columnsDetails" [p-items]="Data" [p-literals]="customLiterals"
+                    [p-actions]="actions"> </po-table>
             </po-container>
             <po-chart *ngIf="newDeathsPerStateData.length > 0" class="po-lg-12 po-md-12 po-sm-12 po-mt-2"
                 p-title="Novas mortes por Estado" [p-series]="newDeathsPerStateData" [p-type]="ChartTypeDonut">
@@ -25,3 +27,52 @@
         </po-container>
     </div>
 </po-page-detail>
+<!-- Modal de detalhes -->
+<po-modal p-click-out="true" p-size="xl" [p-title]="titleModalDetails">
+    <app-loading *ngIf="isLoadingDetails"></app-loading>
+    <po-container *ngIf="!isLoadingDetails" [p-no-border]="true" class="po-lg-12">
+        <div *ngIf="!isLoading" class="po-row">
+            <po-widget class="po-lg-6 po-mt-2" p-title="Casos">
+                <div *ngIf="numberOfCases == 0 && numberOfNewCases == 0" class="po-font-text-smaller po-text-center">
+                    Carregando...
+                </div>
+                <div *ngIf="numberOfCases > 0" class="po-font-subtitle po-text-center">{{numberOfCases | number}}</div>
+                <div class="po-text-center">{{numberOfNewCases | number}} novos</div>
+            </po-widget>
+            <po-widget class="po-lg-6 po-mt-2" p-title="Mortes">
+                <div *ngIf="numberOfDeaths == 0 && numberOfNewDeaths == 0" class="po-font-text-smaller po-text-center">
+                    Carregando...
+                </div>
+                <div *ngIf="numberOfDeaths > 0" class="po-font-subtitle po-text-center">{{numberOfDeaths | number }}
+                </div>
+                <div class="po-text-center">{{numberOfNewDeaths | number}} novas</div>
+            </po-widget>
+            <po-container [p-no-border]="true" class="po-lg-12">
+                <span *ngIf="!isLoading" class="date-updated">Última atualização dos dados feita em
+                    {{dateDetails | date: 'dd/MM/yyyy'}}</span>
+            </po-container>
+        </div>
+        <po-container *ngIf="!isLoadingDetails" class="po-lg-12 po-mt-2">
+            <po-container [p-no-border]="true" class="po-lg-8">
+                <span class="po-font-text-bold">{{titleNewCasesDetails}}</span>
+            </po-container>
+            <app-loading *ngIf="BarChartDataNewDeathsDataset.length == 0"></app-loading>
+            <canvas *ngIf="BarChartDataNewCasesDataset.length > 0" baseChart width="400" height="200"
+                [datasets]="BarChartDataNewCasesDataset" [labels]="BarChartDataNewCasesLabels" [options]="ChartOptions"
+                [colors]="BarChartDataNewCasesColors" [legend]="ChartLegend" [chartType]="BarChartType"
+                [plugins]="ChartPlugins">
+            </canvas>
+        </po-container>
+        <po-container *ngIf="!isLoadingDetails" class="po-lg-12 po-mt-2">
+            <po-container [p-no-border]="true" class="po-lg-8">
+                <span class="po-font-text-bold">{{titleNewDeathsDetails}}</span>
+            </po-container>
+            <app-loading *ngIf="BarChartDataNewDeathsDataset.length == 0"></app-loading>
+            <canvas *ngIf="BarChartDataNewDeathsDataset.length > 0" baseChart width="400" height="200"
+                [datasets]="BarChartDataNewDeathsDataset" [labels]="BarChartDataNewDeathsLabels"
+                [options]="ChartOptions" [colors]="BarChartDataNewDeathsColors" [legend]="ChartLegend"
+                [chartType]="BarChartType" [plugins]="ChartPlugins">
+            </canvas>
+        </po-container>
+    </po-container>
+</po-modal>

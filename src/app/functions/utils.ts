@@ -117,3 +117,27 @@ export function ExtractNewDataPerState(Dataset: CasoFull[], PropertyName: String
             return deaths.sort((a, b) => b.value - a.value).slice(0, MaxResults)
     }
 }
+
+/**
+ * Retorna os dados dos estados (novos casos, novas mortes) somados
+ * @param Dataset Recebe o dataset de dados a ser trabalhado
+ * @param PropertyName Recebe o nome da propriedade que deve ser trabalhada no dataset
+ */
+export function CalculateNew(Dataset: CasoFull[], PropertyName: string): number {
+    switch (PropertyName) {
+        case PropertyName = 'new_confirmed':
+            let sumNewCases: any = new Array()
+            let cases = CalculateNewData(Dataset, 'new_confirmed')
+            Object.keys(cases).forEach(function (item) {
+                sumNewCases.push(cases[item])
+            })
+            return sumNewCases[0][sumNewCases[0].length - 1]
+        case PropertyName = 'new_deaths':
+            let sumNewDeaths: any = new Array()
+            let deaths = CalculateNewData(Dataset, 'new_deaths')
+            Object.keys(deaths).forEach(function (item) {
+                sumNewDeaths.push(deaths[item])
+            })
+            return sumNewDeaths[0][sumNewDeaths[0].length - 1]
+    }
+}
