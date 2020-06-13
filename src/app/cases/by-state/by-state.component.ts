@@ -145,7 +145,6 @@ export class ByStateComponent implements OnInit, OnDestroy {
     this._service.params = this._service.params.set('state', stateDetails)
     this.request = this._service.getDataCasosFull().subscribe(response => {
       this.DataDetails = response.body['results']
-      this.dateDetails = this.DataDetails[0]['date']
       this.getDataBarChartNewCases(this.DataDetails)
       this.getDataBarChartNewDeaths(this.DataDetails)
       this.numberOfCases = this.DataDetails[0]['last_available_confirmed']
@@ -193,6 +192,7 @@ export class ByStateComponent implements OnInit, OnDestroy {
     this.titleModalDetails = `Dados por estado - ${row['state']}`
     this.titleNewCasesDetails = `Número de novos casos - ${row['state']}`
     this.titleNewDeathsDetails = `Número de novas mortes - ${row['state']}`
+    this.dateDetails = row['date']
 
     this.getDataCasosDetailsRequest(row['state'])
 
